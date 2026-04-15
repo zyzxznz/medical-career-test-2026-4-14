@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医护职业转型测试系统 - 增强版</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 增强报告按钮样式 */
+        .enhanced-report-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .enhanced-report-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .enhanced-report-btn i {
+            font-size: 1.2rem;
+        }
+        
+        /* 加载动画 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 结果页面增强样式 */
+        .result-actions-enhanced {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .result-note {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+            font-size: 0.95rem;
+            color: #555;
+        }
+        
+        .result-note i {
+            color: #667eea;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 项目介绍头部 -->
+    <div class="project-intro-header">
+        <div class="intro-container">
+            <div class="intro-content">
+                <h2><i class="fas fa-hands-helping"></i> 女性医护职业发展互助项目</h2>
+                <p class="intro-description">
+                    我们是一个公益自发的女性自主项目，所有开发人员均为女性。如果你正在从事医护行业并感到很大压力，考虑职业规划和转型，或者感到孤立无援、势单力薄，欢迎在这里找到同行助力。
+                </p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-qrcode"></i>
+                        <span>扫描二维码加入社群</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-weixin"></i>
+                        <span>添加微信ID：<strong>zyzxznz2021</strong></span>
+                    </div>
+                </div>
+                <div class="intro-note">
+                    <i class="fas fa-heart"></i>
+                    <span>女性帮助女性，一起成长，共同前行</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-stethoscope"></i>
+                <h1>医护职业转型测试系统 - 增强版</h1>
+            </div>
+            <p class="subtitle">基于专业数据分析的个性化职业转型评估与建议</p>
+            <div class="version-badge">
+                <i class="fas fa-star"></i> 新增：个性化深度分析报告
+            </div>
+        </header>
+
+        <main>
+            <!-- 欢迎页面 -->
+            <section id="welcome-section" class="section active">
+                <div class="welcome-card">
+                    <div class="welcome-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h2>欢迎使用医护职业转型测试</h2>
+                    <p class="welcome-description">
+                        本测试系统基于医疗行业大数据和职业发展模型，帮助医护人员评估自身优势、识别转型方向，并提供个性化的职业发展建议。
+                    </p>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>专业评估</h3>
+                            <p>基于医疗行业数据分析</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-lightbulb"></i>
+                            <h3>智能建议</h3>
+                            <p>个性化转型路径推荐</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-road"></i>
+                            <h3>发展路径</h3>
+                            <p>清晰的职业发展路线图</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-file-alt"></i>
+                            <h3>深度报告</h3>
+                            <p>个性化分析报告（新增）</p>
+                        </div>
+                    </div>
+                    
+                    <div class="welcome-actions">
+                        <button id="start-test" class="btn-primary" onclick="showSection('info')">
+                            <i class="fas fa-play-circle"></i> 开始测试
+                        </button>
+                        
+                        <div style="margin-top: 15px;">
+                            <a href="demo-enhanced-report.html" class="btn-secondary" style="display: inline-block;">
+                                <i class="fas fa-eye"></i> 查看报告示例
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 个人信息页面 -->
+            <section id="info-section" class="section">
+                <div class="form-card">
+                    <h2><i class="fas fa-user-md"></i> 个人信息</h2>
+                    <p class="form-description">请填写基本信息，以便为您提供更精准的评估</p>
+                    
+                    <form id="user-info-form" onsubmit="return submitUserInfo()">
+                        <div class="form-group">
+                            <label for="current-role"><i class="fas fa-briefcase-medical"></i> 当前职位</label>
+                            <select id="current-role" required>
+                                <option value="">请选择当前职位</option>
+                                <option value="doctor">医生</option>
+                                <option value="nurse">护士</option>
+                                <option value="pharmacist">药剂师</option>
+                                <option value="technician">医技人员</option>
+                                <option value="administrator">医疗管理人员</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="experience"><i class="fas fa-calendar-alt"></i> 工作年限</label>
+                            <select id="experience" required>
+                                <option value="">请选择工作年限</option>
+                                <option value="0-3">0-3年</option>
+                                <option value="3-5">3-5年</option>
+                                <option value="5-10">5-10年</option>
+                                <option value="10-15">10-15年</option>
+                                <option value="15+">15年以上</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="education"><i class="fas fa-graduation-cap"></i> 最高学历</label>
+                            <select id="education" required>
+                                <option value="">请选择学历</option>
+                                <option value="bachelor">本科</option>
+                                <option value="master">硕士</option>
+                                <option value="doctor">博士</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="specialty"><i class="fas fa-clinic-medical"></i> 专业领域</label>
+                            <input type="text" id="specialty" placeholder="如：内科、外科、护理管理等" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-bullseye"></i> 转型意向（可多选）</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox">
+                                    <input type="checkbox" name="transition-goals" value="management">
+                                    <span>医疗管理</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="transition-goals" value="education">
+                                    <span>医学教育</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="transition-goals" value="research">
+                                    <span>医学研究</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="transition-goals" value="industry">
+                                    <span>医药产业</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="transition-goals" value="public-health">
+                                    <span>公共卫生</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="transition-goals" value="digital-health">
+                                    <span>数字医疗</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="showSection('welcome')">
+                                <i class="fas fa-arrow-left"></i> 返回
+                            </button>
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-arrow-right"></i> 下一步：能力评估
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 能力评估页面 -->
+            <section id="assessment-section" class="section">
+                <div class="assessment-card">
+                    <div class="assessment-header">
+                        <h2><i class="fas fa-clipboard-check"></i> 能力评估</h2>
+                        <div class="progress">
+                            <div class="progress-bar" id="progress-bar"></div>
+                            <span id="progress-text">0/10</span>
+                        </div>
+                    </div>
+
+                    <div id="question-container">
+                        <!-- 问题将通过JavaScript动态加载 -->
+                    </div>
+
+                    <div class="assessment-actions">
+                        <button id="prev-question" class="btn-secondary" onclick="prevQuestion()">
+                            <i class="fas fa-chevron-left"></i> 上一题
+                        </button>
+                        <button id="next-question" class="btn-primary" onclick="nextQuestion()">
+                            下一题 <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button id="submit-assessment" class="btn-success" style="display: none;" onclick="submitAssessment()">
+                            <i class="fas fa-paper-plane"></i> 提交评估
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 结果页面 -->
+            <section id="result-section" class="section">
+                <div class="result-card">
+                    <div class="result-header">
+                        <div class="result-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h2>评估结果</h2>
+                        <p class="result-subtitle">基于您的专业背景和能力评估</p>
+                    </div>
+
+                    <div class="result-content">
+                        <div class="score-card">
+                            <h3><i class="fas fa-chart-bar"></i> 转型匹配度</h3>
+                            <div class="score-circle">
+                                <div class="score-value" id="match-score">0%</div>
+                                <div class="score-label">总体匹配度</div>
+                            </div>
+                        </div>
+
+                        <div class="recommendations">
+                            <h3><i class="fas fa-lightbulb"></i> 推荐转型方向</h3>
+                            <div id="recommendation-list">
+                                <!-- 推荐方向将通过JavaScript动态加载 -->
+                            </div>
+                        </div>
+
+                        <div class="action-plan">
+                            <h3><i class="fas fa-road"></i> 行动计划建议</h3>
+                            <div id="action-plan-content">
+                                <!-- 行动计划将通过JavaScript动态加载 -->
+                            </div>
+                        </div>
+                        
+                        <div class="result-note">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>新增功能：</strong> 现在您可以生成个性化的深度分析报告，包含详细的技能差距分析、风险评估和具体行动计划。
+                        </div>
+                    </div>
+
+                    <div class="result-actions-enhanced">
+                        <button id="restart-test" class="btn-primary" onclick="restartTest()">
+                            <i class="fas fa-redo"></i> 重新测试
+                        </button>
+                        <button id="download-report" class="btn-secondary" onclick="downloadReport()">
+                            <i class="fas fa-download"></i> 下载基础报告
+                        </button>
+                        <button id="enhanced-report-btn" class="enhanced-report-btn" onclick="generateEnhancedReport()">
+                            <i class="fas fa-chart-line"></i> 生成深度分析报告
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>© 2026 医护职业转型测试系统 | 女性医护职业发展互助项目 - 增强版</p>
+            <p class="footer-links">
+                <a href="#" onclick="showSection('welcome')"><i class="fas fa-home"></i> 首页</a>
+                <a href="demo-enhanced-report.html"><i class="fas fa-file-alt"></i> 报告示例</a>
+                <a href="enhanced-report.html"><i class="fas fa-eye"></i> 完整报告</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- 加载遮罩层 -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+        <p id="loading-message">正在生成个性化分析报告...</p>
+    </div>
+
+    <script>
+        // ============================================
+        // 基础测试系统逻辑（原有功能）
+        // ============================================
+        
+        // 全局状态
+        let currentSection = 'welcome';
+        let currentQuestion = 0;
+        const totalQuestions = 10;
+        let answers = [];
+        
+        // 评估问题
+        const assessmentQuestions = [
+            {
+                text: '您是否享受带领团队、制定工作计划和分配任务的过程？',
+                options: [
+                    '非常享受，这是我的强项',
+                    '比较享受，有一定经验',
+                    '一般，可以接受',
+                    '不太喜欢，更愿意专注技术',
+                    '完全不喜欢，避免管理职责'
+                ]
+            },
+            {
+                text: '您是否愿意将自己的专业知识传授给他人，包括培训新同事或学生？',
+                options: [
+                    '非常愿意，乐于分享知识',
+                    '比较愿意，有一定教学经验',
+                    '一般，偶尔可以',
+                    '不太愿意，更专注临床',
+                    '完全不愿意，不擅长教学'
+                ]
+            },
+            {
+                text: '您对参与医学研究、数据分析或撰写学术论文的兴趣如何？',
+                options: [
+                    '非常有兴趣，已有研究经验',
+                    '比较有兴趣，愿意尝试',
+                    '一般，可以参与',
+                    '不太有兴趣，更关注临床',
+                    '完全没兴趣，避免研究工作'
+                ]
+            },
+            {
+                text: '您对医疗技术创新、新产品开发或医疗创业的兴趣如何？',
+                options: [
+                    '非常有兴趣，关注行业创新',
+                    '比较有兴趣，愿意了解',
+                    '一般，保持关注',
+                    '不太有兴趣，更关注传统医疗',
+                    '完全没兴趣，不关注产业'
+                ]
+            },
+            {
+                text: '您在与患者、家属或跨部门同事沟通方面的自信程度如何？',
+                options: [
+                    '非常自信，擅长沟通协调',
+                    '比较自信，沟通顺畅',
+                    '一般，基本沟通没问题',
+                    '不太自信，需要改进',
+                    '很不自信，沟通是短板'
+                ]
+            },
+            {
+                text: '您对医疗信息化、数字医疗工具或人工智能在医疗中的应用兴趣如何？',
+                options: [
+                    '非常有兴趣，积极学习新技术',
+                    '比较有兴趣，愿意尝试',
+                    '一般，可以接受',
+                    '不太有兴趣，更习惯传统方式',
+                    '完全没兴趣，抵触新技术'
+                ]
+            },
+            {
+                text: '您在处理工作压力、紧急情况和复杂问题时的应对能力如何？',
+                options: [
+                    '非常强，能够从容应对',
+                    '比较强，基本能处理好',
+                    '一般，需要时间适应',
+                    '不太强，容易感到压力',
+                    '很弱，需要大量支持'
+                ]
+            },
+            {
+                text: '您对学习新知识、掌握新技能的意愿如何？',
+                options: [
+                    '非常强烈，持续学习',
+                    '比较强烈，愿意学习',
+                    '一般，需要时学习',
+                    '不太强烈，习惯现有知识',
+                    '很弱，抵触学习新东西'
+                ]
+            },
+            {
+                text: '您对医疗政策、法规和行业标准的关注程度如何？',
+                options: [
+                    '非常关注，深入研究',
+                    '比较关注，了解重要内容',
+                    '一般，知道基本要求',
+                    '不太关注，需要时查阅',
+                    '完全不关注，不感兴趣'
+                ]
+            },
+            {
+                text: '您对创业、自由职业或独立工作的兴趣如何？',
+                options: [
+                    '非常有兴趣，已有计划',
+                    '比较有兴趣，愿意尝试',
+                    '一般，可以考虑',
+                    '不太有兴趣，偏好稳定工作',
+                    '完全没兴趣，需要稳定保障'
+                ]
+            }
+        ];
+        
+        // 显示指定页面
+        function showSection(sectionId) {
+            console.log(`切换到页面: ${sectionId}`);
+            
+            // 隐藏所有页面
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示目标页面
+            const targetSection = document.getElementById(sectionId + '-section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+                currentSection = sectionId;
+                
+                // 特殊处理：如果是评估页面，初始化问题
+                if (sectionId === 'assessment') {
+                    showQuestion(0);
+                }
+                
+                // 滚动到顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        // 提交用户信息
+        function submitUserInfo() {
+            console.log('提交用户信息');
+            
+            // 获取表单数据
+            const currentRole = document.getElementById('current-role').value;
+            const experience = document.getElementById('experience').value;
+            const education = document.getElementById('education').value;
+            const specialty = document.getElementById('specialty').value;
+            
+            // 验证必填字段
+            if (!currentRole || !experience || !education || !specialty) {
+                alert('请填写所有必填信息');
+                return false;
+            }
+            
+            // 保存用户信息到全局变量（用于增强报告）
+            window.userInfo = {
+                currentRole: currentRole,
+                experience: experience,
+                education: education,
+                specialty: specialty,
+                transitionGoals: Array.from(document.querySelectorAll('input[name="transition-goals"]:checked'))
+                    .map(cb => cb.value)
+            };
+            
+            console.log('用户信息已保存:', window.userInfo);
+            
+            // 跳转到评估页面
+            showSection('assessment');
+            return false; // 阻止表单默认提交
+        }
+        
+        // 显示指定问题
+        function showQuestion(questionIndex) {
+            console.log(`显示问题 ${questionIndex + 1}`);
+            
+            if (questionIndex < 0 || questionIndex >= totalQuestions) {
+                console.error('问题索引超出范围');
+                return;
+            }
+            
+            currentQuestion = questionIndex;
+            const question = assessmentQuestions[questionIndex];
+            const questionContainer = document.getElementById('question-container');
+            
+            if (!questionContainer) return;
+            
+            // 构建问题HTML
+            let optionsHtml = '';
+            question.options.forEach((option, index) => {
+                const isSelected = answers[questionIndex] === index;
+                optionsHtml += `
+                    <div class="option ${isSelected ? 'selected' : ''}" 
+                         onclick="selectAnswer(${questionIndex}, ${index})">
+                        <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                        <div class="option-text">${option}</div>
+                        ${isSelected ? '<div class="option-check"><i class="fas fa-check"></i></div>' : ''}
+                    </div>
+                `;
+            });
+            
+            questionContainer.innerHTML = `
+                <div class="question">
+                    <h3>问题 ${questionIndex + 1}/${totalQuestions}</h3>
+                    <p>${question.text}</p>
+                </div>
+                <div class="options">
+                    ${optionsHtml}
+                </div>
+            `;
+            
+            // 更新进度条
+            updateProgress();
+            
+            // 更新按钮状态
+            updateButtonStates();
+        }
+        
+        // 选择答案
+        function selectAnswer(questionIndex, answerIndex) {
+            console.log(`问题 ${questionIndex + 1} 选择答案 ${answerIndex}`);
+            
+            answers[questionIndex] = answerIndex;
+            
+            // 重新显示当前问题以更新选择状态
+            showQuestion(questionIndex);
+        }
+        
+        // 更新进度条
+        function updateProgress() {
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            
+            if (!progressBar || !progressText) return;
+            
+            const answeredCount = answers.filter(a => a !== undefined).length;
+            const progressPercent = (answeredCount / totalQuestions) * 100;
+            
+            progressBar.style.width = `${progressPercent}%`;
+            progressText.textContent = `${answeredCount}/${totalQuestions}`;
+        }
+        
+        // 更新按钮状态
+        function updateButtonStates() {
+            const prevBtn = document.getElementById('prev-question');
+            const nextBtn = document.getElementById('next-question');
+            const submitBtn = document.getElementById('submit-assessment');
+            
+            if (!prevBtn || !nextBtn || !submitBtn) return;
+            
+            // 上一题按钮
+            prevBtn.disabled = currentQuestion === 0;
+            
+            // 下一题/提交按钮
+            const isLastQuestion = currentQuestion === totalQuestions - 1;
+            const isAnswered = answers[currentQuestion] !== undefined;
+            
+            if (isLastQuestion) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = isAnswered ? 'inline-block' : 'none';
+            } else {
+                nextBtn.style.display = 'inline-block';
+                submitBtn.style.display = 'none';
+                nextBtn.disabled = !isAnswered;
+            }
+        }
+        
+        // 上一题
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            }
+        }
+        
+        // 下一题
+        function nextQuestion() {
+            if (answers[currentQuestion] === undefined) {
+                alert('请先选择答案');
+                return;
+            }
+            
+            console.log('✅ 当前问题已回答，可以切换到下一题');
+            
+            if (currentQuestion < totalQuestions - 1) {
+                showQuestion(currentQuestion + 1);
+            } else {
+                // 如果是最后一题，提交评估
+                submitAssessment();
+            }
+        }
+        
+        // 提交评估
+        function submitAssessment() {
+            console.log('提交评估');
+            
+            // 检查是否所有问题都已回答
+            let allAnswered = true;
+            for (let i = 0; i < totalQuestions; i++) {
+                if (answers[i] === undefined) {
+                    allAnswered = false;
+                    console.log(`❌ 问题 ${i + 1} 未回答`);
+                }
+            }
+            
+            if (!allAnswered) {
+                alert(`您还有 ${totalQuestions - answers.filter(a => a !== undefined).length} 个问题未回答，请完成所有问题后再提交。`);
+                return;
+            }
+            
+            // 计算分数
+            let totalScore = 0;
+            answers.forEach(answer => {
+                if (answer !== undefined) {
+                    // 答案0-4对应分数5-1（反向计分）
+                    totalScore += (4 - answer) + 1;
+                }
+            });
+            
+            const maxScore = totalQuestions * 5;
+            const matchScore = Math.round((totalScore / maxScore) * 100);
+            
+            console.log(`得分: ${totalScore}/${maxScore} = ${matchScore}%`);
+            
+            // 保存评估分数到全局变量（用于增强报告）
+            window.assessmentScores = {
+                leadership: calculateCategoryScore([0]),      // 领导力
+                teaching: calculateCategoryScore([1]),        // 教学
+                research: calculateCategoryScore([2]),        // 研究
+                innovation: calculateCategoryScore([3]),      // 创新
+                communication: calculateCategoryScore([4]),   // 沟通
+                tech: calculateCategoryScore([5]),            // 技术
+                stress: calculateCategoryScore([6]),          // 抗压
+                learning: calculateCategoryScore([7]),        // 学习
+                policy: calculateCategoryScore([8]),          // 政策
+                entrepreneur: calculateCategoryScore([9])     // 创业
+            };
+            
+            console.log('评估分数已保存:', window.assessmentScores);
+            
+            // 更新结果页面
+            document.getElementById('match-score').textContent = `${matchScore}%`;
+            
+            // 生成推荐内容
+            generateRecommendations(matchScore);
+            
+            // 显示结果页面
+            showSection('result');
+        }
+        
+        // 计算分类分数
+        function calculateCategoryScore(questionIndices) {
+            let total = 0;
+            questionIndices.forEach(index => {
+                if (answers[index] !== undefined) {
+                    // 答案0-4对应分数5-1（反向计分）
+                    total += (4 - answers[index]) + 1;
+                }
+            });
+            return total;
+        }
+        
+        // 生成推荐内容
+        function generateRecommendations(score) {
+            const recommendationList = document.getElementById('recommendation-list');
+            const actionPlanContent = document.getElementById('action-plan-content');
+            
+            if (!recommendationList || !actionPlanContent) return;
+            
+            let recommendationsHtml = '';
+            let actionPlanHtml = '';
+            
+            if (score >= 80) {
+                recommendationsHtml = `
+                    <div class="recommendation-item">
+                        <h4>1. 医疗管理 (匹配度: ${score}%)</h4>
+                        <p>医院管理、科室主任、医疗质量管控等。您的领导力和管理能力突出，适合向管理方向发展。</p>
+                    </div>
+                    <div class="recommendation-item">
+                        <h4>2. 医学教育 (匹配度: ${Math.round(score * 0.85)}%)</h4>
+                        <p>医学院教师、临床培训师、医学教育管理。您有较强的教学和沟通能力。</p>
+                    </div>
+                    <div class="recommendation-item">
+                        <h4>3. 数字医疗 (匹配度: ${Math.round(score * 0.75)}%)</h4>
+                        <p>医疗信息化、健康科技、远程医疗。您对新技术有较强兴趣。</p>
+                    </div>
+                `;
+                
+                actionPlanHtml = `
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>技能提升</h4>
+                            <p>针对医疗管理方向，建议重点提升领导力、沟通能力、抗压能力等核心能力。</p>
+                        </div>
+                    </div>
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>学习资源</h4>
+                            <p>推荐参加医院管理培训课程、医疗质量改进研讨会，阅读管理类书籍。</p>
+                        </div>
+                    </div>
+                `;
+            } else if (score >= 60) {
+                recommendationsHtml = `
+                    <div class="recommendation-item">
+                        <h4>1. 医学教育 (匹配度: ${score}%)</h4>
+                        <p>医学院教师、临床培训师、医学教育管理。您的教学和沟通能力较强。</p>
+                    </div>
+                    <div class="recommendation-item">
+                        <h4>2. 数字医疗 (匹配度: ${Math.round(score * 0.75)}%)</h4>
+                        <p>医疗信息化、健康科技、远程医疗。您对新技术有一定兴趣。</p>
+                    </div>
+                    <div class="recommendation-item">
+                        <h4>3. 医学研究 (匹配度: ${Math.round(score * 0.65)}%)</h4>
+                        <p>临床研究、基础医学研究、科研项目管理。您有一定的研究兴趣。</p>
+                    </div>
+                `;
+                
+                actionPlanHtml = `
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>技能提升</h4>
+                            <p>建议提升教学能力、沟通技巧和专业知识更新能力。</p>
+                        </div>
+                    </div>
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>学习资源</h4>
+                            <p>参加教学技能培训、教育技术应用课程，积累教学经验。</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                recommendationsHtml = `
+                    <div class="recommendation-item">
+                        <h4>1. 继续临床工作 (匹配度: ${100 - score}%)</h4>
+                        <p>建议继续在临床岗位发展，深化专业领域技能。</p>
+                    </div>
+                    <div class="recommendation-item">
+                        <h4>2. 技能提升计划</h4>
+                        <p>建议参加相关培训，提升综合能力后再考虑转型。</p>
+                    </div>
+                    <div class="recommendation-item">
+                        <h4>3. 探索其他方向</h4>
+                        <p>可以尝试参与不同项目，了解自己的兴趣和优势。</p>
+                    </div>
+                `;
+                
+                actionPlanHtml = `
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>自我评估</h4>
+                            <p>建议进行更深入的自我评估，明确职业兴趣和发展方向。</p>
+                        </div>
+                    </div>
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>技能培训</h4>
+                            <p>参加基础技能培训，提升沟通、团队协作等通用能力。</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            recommendationList.innerHTML = recommendationsHtml;
+            actionPlanContent.innerHTML = actionPlanHtml;
+        }
+        
+        // 重新测试
+        function restartTest() {
+            console.log('重新开始测试');
+            
+            // 重置状态
+            currentSection = 'welcome';
+            currentQuestion = 0;
+            answers = [];
+            
+            // 重置表单
+            document.getElementById('user-info-form').reset();
+            
+            // 显示欢迎页面
+            showSection('welcome');
+        }
+        
+        // 下载报告
+        function downloadReport() {
+            alert('基础报告下载功能正在开发中...\n\n您的评估结果已保存，稍后可通过邮件接收详细报告。');
+        }
+        
+        // ============================================
+        // 增强报告功能集成
+        // ============================================
+        
+        // 生成增强报告
+        function generateEnhancedReport() {
+            console.log('开始生成增强报告...');
+            console.log('当前用户信息:', window.userInfo);
+            console.log('当前评估分数:', window.assessmentScores);
+            
+            // 显示加载动画
+            showLoading('正在生成个性化分析报告...');
+            
+            // 延迟执行以显示加载效果
+            setTimeout(() => {
+                try {
+                    // 检查是否已完成测试
+                    if (!window.userInfo || !window.assessmentScores) {
+                        console.log('未找到用户信息或评估分数');
+                        hideLoading();
+                        alert('请先完成测试后再生成报告。\n\n您需要：\n1. 填写个人信息\n2. 完成10个问题的能力评估\n3. 查看基础评估结果\n\n然后才能生成深度分析报告。');
+                        return;
+                    }
+                    
+                    console.log('开始构建报告数据...');
+                    // 构建报告数据
+                    const reportData = buildEnhancedReportData();
+                    console.log('报告数据构建完成:', reportData);
+                    
+                    // 保存到本地存储
+                    localStorage.setItem('enhancedReportData', JSON.stringify(reportData));
+                    
+                    console.log('报告数据已保存到本地存储，跳转到增强报告页面...');
+                    
+                    // 跳转到增强报告页面
+                    window.location.href = 'enhanced-report.html';
+                    
+                } catch (error) {
+                    console.error('生成报告时出错:', error);
+                    hideLoading();
+                    alert('生成报告时出现错误，请稍后重试');
+                }
+            }, 1500);
+        }
+        
+        // 构建增强报告数据
+        function buildEnhancedReportData() {
+            // 专业数据中的转型方向属性
+            const directionAttributes = {
+                '医疗科技': {
+                    requiredSkills: ['技术操作', '数据分析', '策划筹备'],
+                    riskLevel: '中',
+                    incomeLevel: '中',
+                    stability: '中',
+                    learningRequirement: '高',
+                    flexibility: '中',
+                    description: '医疗设备、软件、AI等科技公司'
+                },
+                '医药企业': {
+                    requiredSkills: ['沟通协调', '策划筹备', '团队领导'],
+                    riskLevel: '中',
+                    incomeLevel: '高',
+                    stability: '中',
+                    learningRequirement: '中',
+                    flexibility: '中',
+                    description: '制药、医疗器械、医药流通等企业'
+                },
+                '健康管理': {
+                    requiredSkills: ['沟通协调', '抗压恢复', '冲突解决'],
+                    riskLevel: '低',
+                    incomeLevel: '中',
+                    stability: '中',
+                    learningRequirement: '中',
+                    flexibility: '中高',
+                    description: '健康管理公司、体检中心、康养机构'
+                },
+                '教育培训': {
+                    requiredSkills: ['演讲表达', '写作表达', '沟通协调'],
+                    riskLevel: '低',
+                    incomeLevel: '中',
+                    stability: '中',
+                    learningRequirement: '中',
+                    flexibility: '中高',
+                    description: '医学院校、培训机构、在线教育'
+                }
+            };
+            
+            // 技能映射
+            const skillMapping = {
+                'leadership': '团队领导',
+                'teaching': '沟通协调',
+                'research': '数据分析',
+                'innovation': '策划筹备',
+                'communication': '沟通协调',
+                'tech': '技术操作',
+                'stress': '抗压恢复',
+                'learning': '学习能力',
+                'policy': '策划筹备',
+                'entrepreneur': '创新思维'
+            };
+            
+            // 计算各方向的匹配度
+            const directions = ['医疗科技', '医药企业', '健康管理', '教育培训'];
+            const enhancedScores = {};
+            
+            directions.forEach(direction => {
+                const attributes = directionAttributes[direction];
+                if (!attributes) {
+                    enhancedScores[direction] = 0;
+                    return;
+                }
+                
+                let score = 0;
+                
+                // 1. 技能匹配度（40%权重）
+                let skillMatch = 0;
+                let maxPossible = 0;
+                
+                attributes.requiredSkills.forEach(skill => {
+                    // 找到对应的评估类别
+                    const matchingCategory = Object.keys(skillMapping).find(
+                        category => skillMapping[category] === skill
+                    );
+                    
+                    if (matchingCategory && window.assessmentScores[matchingCategory]) {
+                        const skillScore = window.assessmentScores[matchingCategory] / 5; // 归一化到0-1
+                        skillMatch += skillScore;
+                        maxPossible += 1;
+                    }
+                });
+                
+                skillMatch = maxPossible > 0 ? skillMatch / maxPossible : 0;
+                score += skillMatch * 0.4;
+                
+                // 2. 风险适配度（20%权重）- 假设用户风险承受能力中等
+                const riskMapping = { '低': 1, '中': 2, '高': 3 };
+                const userRiskTolerance = 2; // 中等风险承受
+                const riskMatch = 1 - Math.abs(riskMapping[attributes.riskLevel] - userRiskTolerance) / 3;
+                score += riskMatch * 0.2;
+                
+                // 3. 收入期望匹配度（15%权重）- 假设用户期望收入增长
+                const incomeMapping = { '低': 1, '中': 2, '高': 3 };
+                const userIncomeExpectation = 2; // 中等收入期望
+                const incomeMatch = 1 - Math.abs(incomeMapping[attributes.incomeLevel] - userIncomeExpectation) / 3;
+                score += incomeMatch * 0.15;
+                
+                // 4. 稳定性需求匹配度（15%权重）- 基于工作年限判断
+                const stabilityNeed = window.userInfo.experience === '0-3' ? 2 : 1; // 新手需要稳定性
+                const stabilityMapping = { '低': 1, '中': 2, '高': 3 };
+                const stabilityMatch = 1 - Math.abs(stabilityMapping[attributes.stability] - stabilityNeed) / 3;
+                score += stabilityMatch * 0.15;
+                
+                // 5. 学习意愿匹配度（10%权重）
+                const learningWillingness = window.assessmentScores.learning > 3 ? 3 : 2;
+                const learningMapping = { '低': 1, '中': 2, '高': 3 };
+                const learningMatch = 1 - Math.abs(learningMapping[attributes.learningRequirement] - learningWillingness) / 3;
+                score += learningMatch * 0.1;
+                
+                enhancedScores[direction] = Math.round(score * 100);
+            });
+            
+            // 生成方向分析（取前三名）
+            const directionAnalysis = [];
+            Object.entries(enhancedScores)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .forEach(([direction, score]) => {
+                    const attributes = directionAttributes[direction];
+                    const analysis = {
+                        direction: direction,
+                        matchScore: score,
+                        matchLevel: getMatchLevel(score),
+                        description: attributes?.description || '',
+                        strengths: [],
+                        challenges: [],
+                        opportunities: [],
+                        skillGaps: analyzeSkillGaps(direction, attributes, skillMapping),
+                        riskAnalysis: analyzeRisk(attributes),
+                        specificRecommendations: []
+                    };
+                    
+                    // 根据用户背景添加优势分析
+                    if (window.userInfo.currentRole === 'doctor' && direction === '医药企业') {
+                        analysis.strengths.push('您的临床经验对药企医学事务部门有重要价值');
+                        analysis.strengths.push('医学专业知识有助于理解产品特性和临床试验设计');
+                    }
+                    
+                    if (window.userInfo.currentRole === 'nurse' && direction === '健康管理') {
+                        analysis.strengths.push('您的护理经验在健康管理领域有直接应用价值');
+                        analysis.strengths.push('患者沟通能力是健康管理的核心技能');
+                    }
+                    
+                    if (direction === '医疗科技' && window.assessmentScores.tech > 3) {
+                        analysis.strengths.push('您对医疗技术有浓厚兴趣，适合技术相关岗位');
+                    }
+                    
+                    // 挑战分析
+                    if (attributes?.riskLevel === '高') {
+                        analysis.challenges.push('该方向风险较高，需要较强的风险承受能力');
+                        analysis.challenges.push('收入可能不稳定，需要做好财务规划');
+                    }
+                    
+                    if (attributes?.learningRequirement === '高') {
+                        analysis.challenges.push('需要较强的学习意愿和持续学习能力');
+                    }
+                    
+                    // 机会分析
+                    if (direction === '医疗科技') {
+                        analysis.opportunities.push('数字医疗是行业发展趋势，市场需求持续增长');
+                        analysis.opportunities.push('您的医疗背景在科技公司中有独特优势');
+                    }
+                    
+                    if (direction === '健康管理') {
+                        analysis.opportunities.push('随着老龄化加剧，健康管理需求快速增长');
+                        analysis.opportunities.push('政策支持健康产业发展，市场空间大');
+                    }
+                    
+                    // 具体建议
+                    analysis.specificRecommendations.push(
+                        `建议参加${direction}相关的培训课程或认证考试`
+                    );
+                    analysis.specificRecommendations.push(
+                        `建立${direction}领域的人脉网络，了解行业动态`
+                    );
+                    
+                    directionAnalysis.push(analysis);
+                });
+            
+            // 生成用户画像分析
+            const userProfileAnalysis = generateUserProfileAnalysis();
+            
+            // 计算转型准备度
+            const readinessScore = calculateReadinessScore();
+            
+            // 构建完整的报告数据
+            const reportData = {
+                userProfile: {
+                    basicInfo: window.userInfo,
+                    professionalBackground: userProfileAnalysis,
+                    assessmentResults: window.assessmentScores,
+                    transitionPreferences: window.userInfo.transitionGoals || []
+                },
+                directionAnalysis: directionAnalysis,
+                overallRecommendations: {
+                    topRecommendation: directionAnalysis[0],
+                    alternativeOptions: directionAnalysis.slice(1),
+                    readinessScore: readinessScore,
+                    timeline: {
+                        exploration: '1-3个月',
+                        preparation: '3-12个月',
+                        transition: '12-24个月',
+                        consolidation: '24个月以上'
+                    }
+                },
+                actionPlan: generateEnhancedActionPlan(directionAnalysis[0]),
+                resources: generateResources(directionAnalysis[0])
+            };
+            
+            return reportData;
+        }
+        
+        // 获取匹配等级
+        function getMatchLevel(score) {
+            if (score >= 90) return '极佳匹配';
+            if (score >= 80) return '优秀匹配';
+            if (score >= 70) return '良好匹配';
+            if (score >= 60) return '一般匹配';
+            return '较低匹配';
+        }
+        
+        // 分析技能差距
+        function analyzeSkillGaps(direction, attributes, skillMapping) {
+            const gaps = [];
+            const requiredSkills = attributes?.requiredSkills || [];
+            
+            requiredSkills.forEach(skill => {
+                // 将技能映射到评估类别
+                const matchingCategory = Object.keys(skillMapping).find(
+                    category => skillMapping[category] === skill
+                );
+                
+                if (matchingCategory && window.assessmentScores[matchingCategory]) {
+                    const userSkillLevel = Math.round((window.assessmentScores[matchingCategory] / 5) * 10); // 转换为1-10分
+                    const requiredLevel = 8; // 目标水平设为8/10
+                    
+                    if (userSkillLevel < requiredLevel) {
+                        gaps.push({
+                            skill: skill,
+                            currentLevel: userSkillLevel,
+                            requiredLevel: requiredLevel,
+                            gap: requiredLevel - userSkillLevel,
+                            improvementSuggestions: getSkillImprovementSuggestions(skill)
+                        });
+                    }
+                }
+            });
+            
+            return gaps;
+        }
+        
+        // 分析风险
+        function analyzeRisk(attributes) {
+            if (!attributes) return { level: '未知', factors: [], mitigations: [] };
+            
+            const riskAnalysis = {
+                level: attributes.riskLevel,
+                factors: [],
+                mitigations: []
+            };
+            
+            if (attributes.riskLevel === '高') {
+                riskAnalysis.factors.push('市场竞争激烈，成功门槛较高');
+                riskAnalysis.factors.push('收入波动大，初期可能面临经济压力');
+                riskAnalysis.mitigations.push('建立应急资金，准备3-6个月的生活费');
+                riskAnalysis.mitigations.push('制定详细的风险管理计划，分阶段实施');
+            } else if (attributes.riskLevel === '中') {
+                riskAnalysis.factors.push('需要一定的适应期和学习成本');
+                riskAnalysis.factors.push('职业发展路径需要清晰规划');
+                riskAnalysis.mitigations.push('参加相关培训，提升竞争力');
+                riskAnalysis.mitigations.push('寻找导师或行业前辈指导');
+            }
+            
+            return riskAnalysis;
+        }
+        
+        // 获取技能提升建议
+        function getSkillImprovementSuggestions(skill) {
+            const suggestions = {
+                '团队领导': [
+                    '参加领导力培训课程',
+                    '主动承担项目管理职责',
+                    '学习团队激励和冲突解决方法'
+                ],
+                '沟通协调': [
+                    '参加沟通技巧培训',
+                    '练习公众演讲和表达',
+                    '学习跨部门协作方法'
+                ],
+                '数据分析': [
+                    '学习统计学基础知识',
+                    '掌握Excel或SPSS等分析工具',
+                    '参加数据分析实战培训'
+                ],
+                '技术操作': [
+                    '学习相关软件或设备操作',
+                    '参加技术认证考试',
+                    '寻找实践机会积累经验'
+                ]
+            };
+            
+            return suggestions[skill] || ['通过实践和培训提升该技能'];
+        }
+        
+        // 生成用户画像分析
+        function generateUserProfileAnalysis() {
+            const analysis = {
+                professionalStrengths: [],
+                developmentAreas: [],
+                uniqueAdvantages: []
+            };
+            
+            // 基于专业背景分析
+            const role = window.userInfo.currentRole;
+            if (role === 'doctor') {
+                analysis.professionalStrengths.push('深厚的医学专业知识');
+                analysis.professionalStrengths.push('丰富的临床经验');
+                analysis.uniqueAdvantages.push('在医药企业、医疗科技方向有独特优势');
+            } else if (role === 'nurse') {
+                analysis.professionalStrengths.push('优秀的患者沟通能力');
+                analysis.professionalStrengths.push('丰富的临床护理经验');
+                analysis.uniqueAdvantages.push('在健康管理、教育培训方向有独特优势');
+            }
+            
+            // 基于能力评估结果分析
+            if (window.assessmentScores.leadership > 3) {
+                analysis.professionalStrengths.push('较强的领导能力');
+            }
+            
+            if (window.assessmentScores.teaching > 3) {
+                analysis.professionalStrengths.push('良好的教学能力');
+            }
+            
+            if (window.assessmentScores.tech < 2) {
+                analysis.developmentAreas.push('技术操作能力有待提升');
+            }
+            
+            return analysis;
+        }
+        
+        // 计算转型准备度
+        function calculateReadinessScore() {
+            let score = 50; // 基础分
+            
+            // 基于评估分数计算
+            const leadershipScore = window.assessmentScores.leadership || 2.5;
+            const communicationScore = window.assessmentScores.communication || 2.5;
+            const learningScore = window.assessmentScores.learning || 2.5;
+            
+            score += (leadershipScore - 2.5) * 10;
+            score += (communicationScore - 2.5) * 8;
+            score += (learningScore - 2.5) * 8;
+            
+            // 基于工作年限调整
+            const experience = window.userInfo.experience;
+            if (experience === '5-10' || experience === '10-15') {
+                score += 10;
+            } else if (experience === '15+') {
+                score += 15;
+            }
+            
+            // 确保分数在0-100范围内
+            return Math.min(100, Math.max(0, Math.round(score)));
+        }
+        
+        // 生成增强的行动计划
+        function generateEnhancedActionPlan(topDirection) {
+            const plan = {
+                shortTerm: [],
+                mediumTerm: [],
+                longTerm: []
+            };
+            
+            if (!topDirection) return plan;
+            
+            // 短期计划（1-3个月）
+            plan.shortTerm.push('完成个人技能详细评估，明确优势与不足');
+            plan.shortTerm.push(`收集${topDirection.direction}行业信息和岗位要求`);
+            plan.shortTerm.push('参加基础的相关培训课程');
+            plan.shortTerm.push('建立初步的行业人脉网络');
+            
+            // 中期计划（3-12个月）
+            plan.mediumTerm.push(`参加${topDirection.direction}相关的专业培训或认证考试`);
+            plan.mediumTerm.push('积累项目经验，参与相关实践项目');
+            plan.mediumTerm.push('深入学习目标方向的核心技能');
+            plan.mediumTerm.push('建立稳定的行业人脉和导师关系');
+            
+            // 长期计划（1-2年）
+            plan.longTerm.push(`实现职业转型，进入${topDirection.direction}领域工作`);
+            plan.longTerm.push('在新岗位上建立专业声誉和影响力');
+            plan.longTerm.push('持续学习和职业发展，争取晋升机会');
+            plan.longTerm.push('考虑进一步的专业深化或管理发展');
+            
+            return plan;
+        }
+        
+        // 生成资源推荐
+        function generateResources(topDirection) {
+            const resources = {
+                training: [],
+                networking: [],
+                certification: []
+            };
+            
+            if (!topDirection) return resources;
+            
+            // 培训资源
+            resources.training.push('Coursera/edX相关在线课程');
+            resources.training.push('国内行业培训项目');
+            resources.training.push('专业技能实战培训');
+            
+            // 人脉网络
+            resources.networking.push('行业交流社群和论坛');
+            resources.networking.push('专业会议和展览');
+            resources.networking.push('校友网络和行业前辈');
+            
+            // 认证考试
+            if (topDirection.direction === '医疗科技') {
+                resources.certification.push('医疗产品经理认证');
+                resources.certification.push('数据分析师认证');
+            } else if (topDirection.direction === '医药企业') {
+                resources.certification.push('医药代表认证');
+                resources.certification.push('医学事务认证');
+            }
+            
+            return resources;
+        }
+        
+        // 显示加载动画
+        function showLoading(message) {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const loadingMessage = document.getElementById('loading-message');
+            
+            if (loadingOverlay && loadingMessage) {
+                loadingMessage.textContent = message;
+                loadingOverlay.style.display = 'flex';
+            }
+        }
+        
+        // 隐藏加载动画
+        function hideLoading() {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'none';
+            }
+        }
+        
+        // 初始化：页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('医护职业转型测试系统 - 增强版已加载');
+            
+            // 检查URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.has('debug');
+            const testMode = urlParams.has('test');
+            
+            if (debugMode) {
+                console.log('🔧 调试模式已启用');
+                console.log('URL参数:', Object.fromEntries(urlParams));
+                console.log('当前路径:', window.location.pathname);
+                console.log('增强报告页面路径:', 'enhanced-report.html');
+                console.log('localStorage支持:', typeof localStorage !== 'undefined' ? '是' : '否');
+            }
+            
+            // 显示欢迎页面
+            showSection('welcome');
+            
+            // 添加控制台测试命令
+            console.log('可用测试命令:');
+            console.log('1. showSection("assessment") - 直接跳转到评估页面');
+            console.log('2. selectAnswer(0, 0) - 选择第一个问题的第一个答案');
+            console.log('3. generateEnhancedReport() - 生成增强报告（需先完成测试）');
+            console.log('4. window.userInfo - 查看当前用户信息');
+            console.log('5. window.assessmentScores - 查看当前评估分数');
+            
+            // 测试按钮点击
+            const enhancedReportBtn = document.getElementById('enhanced-report-btn');
+            if (enhancedReportBtn) {
+                console.log('✅ 找到增强报告按钮:', enhancedReportBtn);
+                enhancedReportBtn.addEventListener('click', function() {
+                    console.log('🖱️ 增强报告按钮被点击');
+                });
+            } else {
+                console.error('❌ 未找到增强报告按钮');
+            }
+            
+            // 测试模式：自动填充数据并跳转到结果页面
+            if (testMode) {
+                console.log('🧪 测试模式已启用，自动填充测试数据...');
+                
+                // 模拟填写个人信息
+                window.userInfo = {
+                    currentRole: 'doctor',
+                    experience: '5-10',
+                    education: 'master',
+                    specialty: '内科',
+                    transitionGoals: ['management', 'education', 'digital-health']
+                };
+                
+                // 模拟完成能力评估
+                window.assessmentScores = {
+                    leadership: 4,
+                    teaching: 4,
+                    research: 3,
+                    innovation: 3,
+                    communication: 4,
+                    tech: 3,
+                    stress: 4,
+                    learning: 4,
+                    policy: 3,
+                    entrepreneur: 2
+                };
+                
+                // 模拟回答所有问题
+                answers = [0, 1, 2, 1, 3, 2, 4, 3, 2, 1];
+                
+                // 计算匹配度
+                let totalScore = 0;
+                answers.forEach(answer => {
+                    if (answer !== undefined) {
+                        totalScore += (4 - answer) + 1;
+                    }
+                });
+                const maxScore = totalQuestions * 5;
+                const matchScore = Math.round((totalScore / maxScore) * 100);
+                
+                // 更新结果页面显示
+                document.getElementById('match-score').textContent = `${matchScore}%`;
+                generateRecommendations(matchScore);
+                
+                // 跳转到结果页面
+                showSection('result');
+                
+                console.log('✅ 测试数据已填充，已跳转到结果页面');
+                console.log('匹配度:', matchScore + '%');
+                console.log('用户信息:', window.userInfo);
+                console.log('评估分数:', window.assessmentScores);
+                
+                // 添加测试提示
+                const resultCard = document.querySelector('.result-card');
+                if (resultCard) {
+                    const testNote = document.createElement('div');
+                    testNote.className = 'result-note';
+                    testNote.innerHTML = `
+                        <i class="fas fa-flask"></i>
+                        <strong>测试模式：</strong> 您正在使用测试模式，数据已自动填充。点击"生成深度分析报告"按钮测试功能。
+                    `;
+                    resultCard.querySelector('.result-content').appendChild(testNote);
+                }
+            } else {
+                // 模拟测试完成状态（用于测试）
+                window.userInfo = window.userInfo || {
+                    currentRole: 'doctor',
+                    experience: '5-10',
+                    education: 'master',
+                    specialty: '内科',
+                    transitionGoals: ['management', 'education']
+                };
+                
+                window.assessmentScores = window.assessmentScores || {
+                    leadership: 4,
+                    teaching: 4,
+                    research: 3,
+                    innovation: 3,
+                    communication: 4,
+                    tech: 3,
+                    stress: 4,
+                    learning: 4,
+                    policy: 3,
+                    entrepreneur: 2
+                };
+            }
+            
+            if (debugMode) {
+                console.log('📊 当前状态:');
+                console.log('window.userInfo:', window.userInfo);
+                console.log('window.assessmentScores:', window.assessmentScores);
+                console.log('answers:', answers);
+                
+                // 添加调试面板
+                const debugPanel = document.createElement('div');
+                debugPanel.style.cssText = `
+                    position: fixed;
+                    bottom: 10px;
+                    right: 10px;
+                    background: rgba(0,0,0,0.8);
+                    color: white;
+                    padding: 10px;
+                    border-radius: 5px;
+                    font-size: 12px;
+                    z-index: 9999;
+                    max-width: 300px;
+                    max-height: 200px;
+                    overflow: auto;
+                `;
+                debugPanel.innerHTML = `
+                    <div style="margin-bottom: 5px; font-weight: bold;">🔧 调试面板</div>
+                    <div>用户信息: ${window.userInfo ? '已设置' : '未设置'}</div>
+                    <div>评估分数: ${window.assessmentScores ? '已设置' : '未设置'}</div>
+                    <div>已回答问题: ${answers ? answers.filter(a => a !== undefined).length : 0}/${totalQuestions}</div>
+                    <button onclick="generateEnhancedReport()" style="margin-top: 5px; padding: 3px 8px; font-size: 11px;">测试报告生成</button>
+                `;
+                document.body.appendChild(debugPanel);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医护职业转型个性化分析报告</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 增强报告专用样式 */
+        .enhanced-report-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .report-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .report-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .report-header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2.2rem;
+        }
+        
+        .report-subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .report-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+        
+        .report-navigation {
+            display: flex;
+            overflow-x: auto;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .nav-btn i {
+            font-size: 1.2rem;
+        }
+        
+        .report-section {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .report-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .report-section h3 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .summary-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .overall-score, .top-recommendation, .key-insights {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .score-circle.large {
+            width: 120px;
+            height: 120px;
+            margin: 1rem auto;
+        }
+        
+        .score-circle.large .score-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .recommendation-highlight {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .recommendation-highlight h5 {
+            font-size: 1.5rem;
+            color: #667eea;
+            margin: 0.5rem 0;
+        }
+        
+        .match-badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+        
+        .profile-analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .profile-strengths, .profile-areas, .profile-unique {
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .profile-strengths {
+            background: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .profile-areas {
+            background: #fff3e0;
+            border-left: 4px solid #FF9800;
+        }
+        
+        .profile-unique {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .direction-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
+        .direction-tab {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+        
+        .direction-tab:hover {
+            background: #e0e0e0;
+        }
+        
+        .direction-tab.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .direction-content {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        
+        .direction-detail {
+            display: none;
+        }
+        
+        .direction-detail.active {
+            display: block;
+        }
+        
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .analysis-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .analysis-card h4 {
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .skill-gap-chart {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .skill-item {
+            margin-bottom: 1rem;
+        }
+        
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .skill-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .skill-level {
+            height: 100%;
+            background: #4CAF50;
+            border-radius: 5px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #667eea;
+            border-radius: 2px;
+        }
+        
+        .timeline-phase {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+        }
+        
+        .timeline-phase::before {
+            content: '';
+            position: absolute;
+            left: -0.5rem;
+            top: 0;
+            width: 1rem;
+            height: 1rem;
+            background: #667eea;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+        
+        .resource-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .resource-category {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .report-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .report-navigation {
+                flex-wrap: wrap;
+            }
+            
+            .nav-btn {
+                min-width: 100px;
+                padding: 0.8rem;
+            }
+            
+            .summary-card, .profile-analysis, .resource-categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-meta {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .direction-tabs {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* 打印样式 */
+        @media print {
+            .report-navigation, .report-actions {
+                display: none;
+            }
+            
+            .report-section {
+                display: block !important;
+                page-break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .enhanced-report-container {
+                padding: 0;
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="enhanced-report-container">
+        <!-- 报告头部 -->
+        <div class="report-header">
+            <div class="report-icon">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <h1>医护职业转型个性化分析报告</h1>
+            <p class="report-subtitle">基于专业背景和能力评估的深度分析</p>
+            <div class="report-meta">
+                <span class="meta-item">
+                    <i class="fas fa-user-md"></i>
+                    <span id="user-role-display">医生</span>
+                </span>
+                <span class="meta-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="user-experience-display">5-10年</span>
+                </span>
+                <span class="meta-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span id="user-education-display">硕士</span>
+                </span>
+                <span class="meta-item">
+                    <i class="fas fa-clinic-medical"></i>
+                    <span id="user-specialty-display">内科</span>
+                </span>
+            </div>
+        </div>
+        
+        <!-- 报告导航 -->
+        <div class="report-navigation">
+            <button class="nav-btn active" data-section="executive-summary">
+                <i class="fas fa-list-alt"></i>
+                <span>执行摘要</span>
+            </button>
+            <button class="nav-btn" data-section="user-profile">
+                <i class="fas fa-user"></i>
+                <span>用户画像</span>
+            </button>
+            <button class="nav-btn" data-section="direction-analysis">
+                <i class="fas fa-chart-line"></i>
+                <span>方向分析</span>
+            </button>
+            <button class="nav-btn" data-section="skill-gaps">
+                <i class="fas fa-tools"></i>
+                <span>技能差距</span>
+            </button>
+            <button class="nav-btn" data-section="action-plan">
+                <i class="fas fa-road"></i>
+                <span>行动计划</span>
+            </button>
+            <button class="nav-btn" data-section="resources">
+                <i class="fas fa-book"></i>
+                <span>资源推荐</span>
+            </button>
+        </div>
+        
+        <!-- 报告内容 -->
+        <div class="report-content">
+            <!-- 执行摘要部分 -->
+            <section id="executive-summary" class="report-section active">
+                <h3><i class="fas fa-file-contract"></i> 执行摘要</h3>
+                <div class="summary-card">
+                    <div class="overall-score">
+                        <h4>总体转型准备度</h4>
+                        <div class="score-circle large">
+                            <div class="score-value" id="overall-readiness">75%</div>
+                            <div class="score-label">准备度评分</div>
+                        </div>
+                        <p class="score-description">基于您的专业背景、能力评估和个人情况综合计算</p>
+                    </div>
+                    
+                    <div class="top-recommendation">
+                        <h4>首选转型方向</h4>
+                        <div class="recommendation-highlight">
+                            <h5 id="top-direction-name">医疗科技</h5>
+                            <div class="match-badge" id="top-direction-match">85% 匹配</div>
+                            <p id="top-direction-desc">医疗设备、软件、AI等科技公司，适合有技术兴趣和临床经验的医护人员</p>
+                        </div>
+                    </div>
+                    
+                    <div class="key-insights">
+                        <h4>关键洞察</h4>
+                        <ul id="key-insights-list">
+                            <li>您的临床经验在医疗科技领域有独特价值</li>
+                            <li>需要重点关注技术操作和数据分析技能的提升</li>
+                            <li>转型风险中等，建议制定渐进式转型计划</li>
+                            <li>数字医疗是行业趋势，职业发展空间较大</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 用户画像部分 -->
+            <section id="user-profile" class="report-section">
+                <h3><i class="fas fa-user-circle"></i> 用户画像分析</h3>
+                <div class="profile-analysis">
+                    <div class="profile-strengths">
+                        <h4><i class="fas fa-star"></i> 专业优势</h4>
+                        <ul id="strengths-list">
+                            <li>深厚的医学专业知识和临床经验</li>
+                            <li>系统的医学思维训练和诊断能力</li>
+                            <li>良好的患者沟通和医患关系处理能力</li>
+                            <li>较强的学习和适应能力</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="profile-areas">
+                        <h4><i class="fas fa-chart-bar"></i> 发展领域</h4>
+                        <ul id="development-areas-list">
+                            <li>技术操作和数据分析能力需要提升</li>
+                            <li>商业思维和项目管理经验有待积累</li>
+                            <li>跨领域协作和资源整合能力</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="profile-unique">
+                        <h4><i class="fas fa-lightbulb"></i> 独特优势</h4>
+                        <ul id="unique-advantages-list">
+                            <li>医疗背景在科技公司中有独特价值</li>
+                            <li>临床经验有助于理解真实医疗需求</li>
+                            <li>医学专业知识是技术产品的核心支撑</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 方向分析部分 -->
+            <section id="direction-analysis" class="report-section">
+                <h3><i class="fas fa-compass"></i> 转型方向详细分析</h3>
+                <div class="direction-tabs" id="direction-tabs">
+                    <!-- 选项卡将通过JavaScript动态生成 -->
+                </div>
+                
+                <div class="direction-content" id="direction-content">
+                    <!-- 方向详细内容将通过JavaScript动态生成 -->
+                </div>
+            </section>
+            
+            <!-- 技能差距部分 -->
+            <section id="skill-gaps" class="report-section">
+                <h3><i class="fas fa-tachometer-alt"></i> 技能差距分析</h3>
+                <div class="skill-gap-chart" id="skill-gap-chart">
+                    <!-- 技能差距图表将通过JavaScript动态生成 -->
+                </div>
+                
+                <div class="skill-improvement">
+                    <h4><i class="fas fa-graduation-cap"></i> 技能提升建议</h4>
+                    <div id="skill-improvement-content">
+                        <!-- 通过JavaScript动态生成 -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 行动计划部分 -->
+            <section id="action-plan" class="report-section">
+                <h3><i class="fas fa-tasks"></i> 行动计划</h3>
+                <div class="timeline">
+                    <div class="timeline-phase">
+                        <h4><i class="fas fa-rocket"></i> 短期行动计划（1-3个月）</h4>
+                        <ul id="short-term-actions">
+                            <li>完成个人技能详细评估，明确优势与不足</li>
+                            <li>收集医疗科技行业信息和岗位要求</li>
+                            <li>参加基础的技术培训课程（如Python、数据分析）</li>
+                            <li>建立初步的行业人脉网络</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="timeline-phase">
+                        <h4><i class="fas fa-chart-line"></i> 中期行动计划（3-12个月）</h4>
+                        <ul id="medium-term-actions">
+                            <li>参加医疗科技相关的专业培训或认证考试</li>
+                            <li>积累项目经验，参与医疗科技相关项目</li>
+                            <li>深入学习目标方向的核心技能</li>
+                            <li>建立稳定的行业人脉和导师关系</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="timeline-phase">
+                        <h4><i class="fas fa-flag-checkered"></i> 长期行动计划（1-2年）</h4>
+                        <ul id="long-term-actions">
+                            <li>实现职业转型，进入医疗科技领域工作</li>
+                            <li>在新岗位上建立专业声誉和影响力</li>
+                            <li>持续学习和职业发展，争取晋升机会</li>
+                            <li>考虑进一步的专业深化或管理发展</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 资源推荐部分 -->
+            <section id="resources" class="report-section">
+                <h3><i class="fas fa-life-ring"></i> 资源与支持</h3>
+                <div class="resource-categories">
+                    <div class="resource-category">
+                        <h4><i class="fas fa-graduation-cap"></i> 培训资源</h4>
+                        <ul id="training-resources">
+                            <li>Coursera/edX医疗科技相关课程</li>
+                            <li>国内医疗科技企业培训项目</li>
+                            <li>数据分析与编程实战培训</li>
+                            <li>医疗产品经理认证培训</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="resource-category">
+                        <h4><i class="fas fa-users"></i> 人脉网络</h4>
+                        <ul id="networking-resources">
+                            <li>医疗科技行业交流社群</li>
+                            <li>医疗创新论坛和会议</li>
+                            <li>校友网络和行业前辈</li>
+                            <li>专业协会和组织</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="resource-category">
+                        <h4><i class="fas fa-certificate"></i> 认证考试</h4>
+                        <ul id="certification-resources">
+                            <li>医疗产品经理认证</li>
+                            <li>数据分析师认证</li>
+                            <li>项目管理专业人士（PMP）</li>
+                            <li>医疗信息化相关认证</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- 报告操作 -->
+        <div class="report-actions">
+            <button id="print-report" class="btn-secondary">
+                <i class="fas fa-print"></i> 打印报告
+            </button>
+            <button id="download-enhanced-report" class="btn-primary">
+                <i class="fas fa-download"></i> 下载完整报告
+            </button>
+            <button id="back-to-test" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i> 返回测试
+            </button>
+        </div>
+    </div>
+    
+    <script src="js/enhanced-report.js"></script>
+    <script>
+        // 报告导航功能
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 移除所有按钮的active类
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                // 隐藏所有报告部分
+                document.querySelectorAll('.report-section').forEach(section => section.classList.remove('active'));
+                
+                // 激活当前按钮
+                this.classList.add('active');
+                
+                // 显示对应的报告部分
+                const sectionId = this.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+        
+        // 打印功能
+        document.getElementById('print-report').addEventListener('click', function() {
+            window.print();
+        });
+        
+        // 返回测试功能
+        document.getElementById('back-to-test').addEventListener('click', function() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+        
+        // 下载报告功能
+        document.getElementById('download-enhanced-report').addEventListener('click', function() {
+            // 这里可以集成实际的报告导出功能
+            alert('报告下载功能需要与后端系统集成。\n\n演示版本：报告内容已完整展示在页面上，您可以使用浏览器的打印功能保存为PDF。');
+        });
+        
+        // 初始化方向分析部分
+        function initDirectionAnalysis() {
+            const directions = [
+                { name: '医疗科技', match: 85, color: '#4CAF50' },
+                { name: '医药企业', match: 78, color: '#2196F3' },
+                { name: '健康管理', match: 72, color: '#FF9800' }
+            ];
+            
+            const tabsContainer = document.getElementById('direction-tabs');
+            const contentContainer = document.getElementById('direction-content');
+            
+            // 清空容器
+            tabsContainer.innerHTML = '';
+            contentContainer.innerHTML = '';
+            
+            // 创建选项卡和内容
+            directions.forEach((direction, index) => {
+                // 创建选项卡
+                const tab = document.createElement('button');
+                tab.className = `direction-tab ${index === 0 ? 'active' : ''}`;
+                tab.textContent = `${direction.name} (${direction.match}%)`;
+                tab.dataset.direction = direction.name;
+                
+                tab.addEventListener('click', function() {
+                    // 激活当前选项卡
+                    document.querySelectorAll('.direction-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 显示对应的内容
+                    document.querySelectorAll('.direction-detail').forEach(d => d.classList.remove('active'));
+                    document.getElementById(`direction-${direction.name}`).classList.add('active');
+                });
+                
+                tabsContainer.appendChild(tab);
+                
+                // 创建内容
+                const content = document.createElement('div');
+                content.id = `direction-${direction.name}`;
+                content.className = `direction-detail ${index === 0 ? 'active' : ''}`;
+                
+                // 根据方向生成不同的内容
+                let analysisContent = '';
+                if (direction.name === '医疗科技') {
+                    analysisContent = `
+                        <div class="analysis-grid">
+                            <div class="analysis-card">
+                                <h4><i class="fas fa-check-circle" style="color: #4CAF50"></i> 优势分析</h4>
+                                <ul>
+                                    <li>您的临床经验对医疗科技产品开发有重要价值</li>
+                                    <li>医学专业知识有助于理解产品特性和应用场景</li>
+                                    <li>医生背景在科技公司中有较高的专业信誉</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="analysis-card">
+                                <h4><i class="fas fa-exclamation-triangle" style="color: #FF9800"></i> 挑战分析</h4>
+                                <ul>
+                                    <li>需要较强的技术学习和适应能力</li>
+                                    <li>行业竞争激烈，需要独特的竞争优势</li>
+                                    <li>需要平衡医疗专业和技术创新的关系</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="analysis-card">
+                                <h4><i class="fas fa-bullseye" style="color: #2196F3"></i> 机会分析</h4>
+                                <ul>
+                                    <li>数字医疗是行业发展趋势，市场需求持续增长</li>
+                                    <li>政策支持医疗科技创新，发展空间大</li>
+                                    <li>您的医疗背景在科技公司中有独特优势</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="analysis-card">
+                                <h4><i class="fas fa-lightbulb" style="color: #9C27B0"></i> 具体建议</h4>
+                                <ul>
+                                    <li>参加医疗科技相关的技术培训课程</li>
+                                    <li>建立医疗科技行业的人脉网络</li>
+                                    <li>寻找实习或项目机会积累经验</li>
+                                    <li>关注医疗科技行业的最新动态</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                } else if (direction.name === '医药企业') {
+                    analysisContent = `
+                        <div class="analysis-grid">
+                            <div class="analysis-card">
+                                <h4><i class="fas fa-check-circle" style="color: #4CAF50"></i> 优势分析</h4>
+                                <ul>
+                                    <li>临床经验对药企医学事务部门有重要价值</li>
+                                    <li>医学专业知识有助于理解产品特性和临床试验</li>
+                                    <li>医生背景在医药行业有较高的专业信誉</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="analysis-card">
+                                <h4><i class="fas fa-exclamation-triangle" style="color: #FF9800"></i> 挑战分析</h4>
+                                <ul>
+                                    <li>需要适应企业的商业运作模式</li>
+                                    <li>行业监管严格，合规要求高</li>
+                                    <li>需要学习市场营销和商业知识</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                content.innerHTML = analysisContent;
+                contentContainer.appendChild(content);
+            });
+        }
+        
+        // 初始化技能差距图表
+        function initSkillGapChart() {
+            const skills = [
+                { name: '技术操作', current: 6, target: 9 },
+                { name: '数据分析', current: 7, target: 9 },
+                { name: '策划筹备', current: 8, target: 9 },
+                { name: '沟通协调', current: 9, target: 9 },
+                { name: '团队领导', current: 7, target: 8 }
+            ];
+            
+            const chartContainer = document.getElementById('skill-gap-chart');
+            chartContainer.innerHTML = '';
+            
+            skills.forEach(skill => {
+                const skillItem = document.createElement('div');
+                skillItem.className = 'skill-item';
+                
+                const percentage = (skill.current / skill.target) * 100;
+                
+                skillItem.innerHTML = `
+                    <div class="skill-name">
+                        <span>${skill.name}</span>
+                        <span>${skill.current}/${skill.target}</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-level" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                
+                chartContainer.appendChild(skillItem);
+            });
+            
+            // 初始化技能提升建议
+            const improvementContent = document.getElementById('skill-improvement-content');
+            improvementContent.innerHTML = `
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h4><i class="fas fa-laptop-code"></i> 技术操作提升</h4>
+                        <ul>
+                            <li>参加Python编程基础课程</li>
+                            <li>学习医疗软件操作和系统使用</li>
+                            <li>实践医疗设备操作和维护</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h4><i class="fas fa-chart-bar"></i> 数据分析提升</h4>
+                        <ul>
+                            <li>学习统计学基础知识和数据分析方法</li>
+                            <li>掌握Excel高级功能和数据分析工具</li>
+                            <li>参加数据分析实战培训</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h4><i class="fas fa-users"></i> 团队领导提升</h4>
+                        <ul>
+                            <li>参加领导力培训课程</li>
+                            <li>主动承担项目管理职责</li>
+                            <li>学习团队激励和冲突解决方法</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 尝试从localStorage读取报告数据
+            let reportData = null;
+            try {
+                const storedData = localStorage.getItem('enhancedReportData');
+                if (storedData) {
+                    reportData = JSON.parse(storedData);
+                    console.log('从localStorage加载报告数据:', reportData);
+                }
+            } catch (error) {
+                console.error('解析localStorage数据时出错:', error);
+            }
+            
+            let role = '医生';
+            let experience = '5-10年';
+            let education = '硕士';
+            let specialty = '内科';
+            
+            // 如果有报告数据，使用报告数据中的用户信息
+            if (reportData && reportData.userProfile && reportData.userProfile.basicInfo) {
+                const userInfo = reportData.userProfile.basicInfo;
+                role = userInfo.currentRole === 'doctor' ? '医生' : 
+                       userInfo.currentRole === 'nurse' ? '护士' : 
+                       userInfo.currentRole === 'pharmacist' ? '药剂师' :
+                       userInfo.currentRole === 'technician' ? '医技人员' :
+                       userInfo.currentRole === 'administrator' ? '医疗管理人员' : '其他';
+                
+                experience = userInfo.experience === '0-3' ? '0-3年' :
+                            userInfo.experience === '3-5' ? '3-5年' :
+                            userInfo.experience === '5-10' ? '5-10年' :
+                            userInfo.experience === '10-15' ? '10-15年' :
+                            userInfo.experience === '15+' ? '15年以上' : '0-3年';
+                
+                education = userInfo.education === 'bachelor' ? '本科' :
+                           userInfo.education === 'master' ? '硕士' :
+                           userInfo.education === 'doctor' ? '博士' : '其他';
+                
+                specialty = userInfo.specialty || '内科';
+                
+                // 如果有评估分数，可以更新方向分析
+                if (reportData.directionAnalysis && reportData.directionAnalysis.length > 0) {
+                    // 这里可以调用函数更新方向分析数据
+                    updateDirectionAnalysis(reportData.directionAnalysis);
+                }
+                
+                // 如果有用户画像分析，可以更新相关内容
+                if (reportData.userProfile && reportData.userProfile.professionalBackground) {
+                    updateUserProfileAnalysis(reportData.userProfile.professionalBackground);
+                }
+            } else {
+                // 如果没有localStorage数据，从URL参数获取
+                const urlParams = new URLSearchParams(window.location.search);
+                role = urlParams.get('role') || '医生';
+                experience = urlParams.get('experience') || '5-10年';
+                education = urlParams.get('education') || '硕士';
+                specialty = urlParams.get('specialty') || '内科';
+            }
+            
+            // 更新用户信息显示
+            document.getElementById('user-role-display').textContent = role;
+            document.getElementById('user-experience-display').textContent = experience;
+            document.getElementById('user-education-display').textContent = education;
+            document.getElementById('user-specialty-display').textContent = specialty;
+            
+            // 更新报告标题中的用户信息
+            document.title = `${role}职业转型分析报告 - 医护职业转型测试系统`;
+            
+            initDirectionAnalysis();
+            initSkillGapChart();
+        });
+        
+        // 更新方向分析
+        function updateDirectionAnalysis(directionAnalysis) {
+            // 这里可以更新方向分析的内容
+            console.log('更新方向分析:', directionAnalysis);
+        }
+        
+        // 更新用户画像分析
+        function updateUserProfileAnalysis(userProfile) {
+            // 这里可以更新用户画像分析的内容
+            console.log('更新用户画像分析:', userProfile);
+        }
+    </script>
+</body>
+</html>
