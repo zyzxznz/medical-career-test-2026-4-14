@@ -1,0 +1,96 @@
+{
+  "demo_users": [
+    {
+      "id": "demo_doctor_1",
+      "name": "张医生",
+      "profession": "doctor",
+      "department": "internal",
+      "experience": "mid",
+      "title": "mid_title",
+      "organization": "tertiary",
+      "description": "内科主治医师，工作8年，希望转型到医药企业"
+    },
+    {
+      "id": "demo_nurse_1",
+      "name": "李护士",
+      "profession": "nurse",
+      "department": "ward_nurse",
+      "experience": "senior",
+      "title": "senior_title",
+      "organization": "secondary",
+      "description": "病房主管护师，工作15年，希望转型到健康管理"
+    },
+    {
+      "id": "demo_tech_1",
+      "name": "王技师",
+      "profession": "technician",
+      "department": "lab_tech",
+      "experience": "junior",
+      "title": "junior_title",
+      "organization": "tertiary",
+      "description": "检验科技师，工作2年，希望转型到医疗科技"
+    },
+    {
+      "id": "demo_doctor_2",
+      "name": "陈医生",
+      "profession": "doctor",
+      "department": "emergency",
+      "experience": "expert",
+      "title": "leader",
+      "organization": "tertiary",
+      "description": "急诊科主任，工作25年，希望转型到教育培训"
+    },
+    {
+      "id": "demo_nurse_2",
+      "name": "刘护士",
+      "profession": "nurse",
+      "department": "or_nurse",
+      "experience": "mid",
+      "title": "mid_title",
+      "organization": "private",
+      "description": "手术室护士，工作6年，希望转型到互联网医疗"
+    }
+  ],
+  
+  "test_scenarios": [
+    {
+      "scenario": "高风险承受医生",
+      "profession": "doctor",
+      "department": "surgery",
+      "economic_pressure": 3,
+      "risk_tolerance": 9,
+      "expected_direction": "自由职业"
+    },
+    {
+      "scenario": "经济压力大护士",
+      "profession": "nurse",
+      "department": "emergency_nurse",
+      "economic_pressure": 8,
+      "risk_tolerance": 4,
+      "expected_direction": "政府/事业单位"
+    },
+    {
+      "scenario": "学习意愿强医技",
+      "profession": "technician",
+      "department": "imaging_tech",
+      "learning_willingness": "full_time",
+      "expected_direction": "深造研究"
+    },
+    {
+      "scenario": "地理位置限制医生",
+      "profession": "doctor",
+      "department": "general",
+      "location_limit": "city",
+      "expected_direction": "健康管理"
+    }
+  ],
+  
+  "statistics": {
+    "total_professions": 3,
+    "total_departments": 19,
+    "total_directions": 8,
+    "total_questions": 18,
+    "algorithm_version": "2.0",
+    "last_updated": "2026-04-14"
+  }
+}

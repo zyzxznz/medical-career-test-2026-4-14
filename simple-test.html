@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单测试 - 医护职业转型测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .page {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .page.active {
+            display: block;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .log {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>简单测试 - 医护职业转型测试</h1>
+    
+    <div id="page-welcome" class="page active">
+        <h2>欢迎页面</h2>
+        <p>点击"开始测试"按钮应该切换到个人信息页面。</p>
+        <button id="btn-start">开始测试</button>
+    </div>
+    
+    <div id="page-info" class="page">
+        <h2>个人信息页面</h2>
+        <p>填写信息后点击"下一步"应该切换到评估页面。</p>
+        <div>
+            <label>当前职位:</label>
+            <select id="current-role">
+                <option value="">请选择</option>
+                <option value="doctor">医生</option>
+                <option value="nurse">护士</option>
+            </select>
+        </div>
+        <div style="margin-top: 10px;">
+            <button id="btn-back">返回</button>
+            <button id="btn-next">下一步</button>
+        </div>
+    </div>
+    
+    <div id="page-assessment" class="page">
+        <h2>能力评估页面</h2>
+        <p>回答问题时应该能选择选项并切换题目。</p>
+        <div id="question-area">
+            <p><strong>问题1:</strong> 您是否享受带领团队、制定工作计划和分配任务的过程？</p>
+            <div>
+                <label><input type="radio" name="q1" value="5"> 非常享受，这是我的强项</label><br>
+                <label><input type="radio" name="q1" value="4"> 比较享受，有一定经验</label><br>
+                <label><input type="radio" name="q1" value="3"> 一般，可以接受</label><br>
+            </div>
+        </div>
+        <div style="margin-top: 20px;">
+            <button id="btn-prev" disabled>上一题</button>
+            <button id="btn-next-q">下一题</button>
+            <button id="btn-submit">提交评估</button>
+        </div>
+    </div>
+    
+    <div id="page-result" class="page">
+        <h2>结果页面</h2>
+        <p>这里显示评估结果。</p>
+        <button id="btn-restart">重新测试</button>
+    </div>
+    
+    <div class="log">
+        <h3>操作日志:</h3>
+        <div id="log-content"></div>
+    </div>
+    
+    <script>
+        // 简单的页面切换逻辑
+        function showPage(pageId) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // 显示目标页面
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                log(`切换到页面: ${pageId}`);
+            }
+        }
+        
+        // 日志函数
+        function log(message) {
+            const logContent = document.getElementById('log-content');
+            const timestamp = new Date().toLocaleTimeString();
+            logContent.innerHTML += `[${timestamp}] ${message}<br>`;
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+        
+        // 初始化事件监听器
+        document.addEventListener('DOMContentLoaded', function() {
+            log('页面加载完成');
+            
+            // 开始测试按钮
+            document.getElementById('btn-start').addEventListener('click', function() {
+                showPage('page-info');
+            });
+            
+            // 返回按钮
+            document.getElementById('btn-back').addEventListener('click', function() {
+                showPage('page-welcome');
+            });
+            
+            // 下一步按钮（个人信息）
+            document.getElementById('btn-next').addEventListener('click', function() {
+                const role = document.getElementById('current-role').value;
+                if (!role) {
+                    alert('请选择当前职位');
+                    return;
+                }
+                showPage('page-assessment');
+            });
+            
+            // 上一题按钮
+            document.getElementById('btn-prev').addEventListener('click', function() {
+                log('点击上一题');
+            });
+            
+            // 下一题按钮
+            document.getElementById('btn-next-q').addEventListener('click', function() {
+                const selected = document.querySelector('input[name="q1"]:checked');
+                if (!selected) {
+                    alert('请选择一个答案');
+                    return;
+                }
+                log(`选择了答案: ${selected.value}`);
+                // 这里可以切换到下一题
+            });
+            
+            // 提交评估按钮
+            document.getElementById('btn-submit').addEventListener('click', function() {
+                showPage('page-result');
+                log('提交评估');
+            });
+            
+            // 重新测试按钮
+            document.getElementById('btn-restart').addEventListener('click', function() {
+                showPage('page-welcome');
+                log('重新开始测试');
+            });
+            
+            // 为单选按钮添加点击日志
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('click', function() {
+                    log(`选择了: ${this.value}`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

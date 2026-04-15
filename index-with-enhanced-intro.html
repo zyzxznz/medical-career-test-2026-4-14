@@ -1,0 +1,356 @@
+' : ''}" onclick="selectAnswer(${questionIndex}, ${index})">
+                            <input type="radio" name="question-${questionIndex}" ${isSelected ? 'checked' : ''}>
+                            <label class="option-label">${option}</label>
+                        </div>
+                    `;
+                });
+                
+                questionContainer.innerHTML = `
+                    <div class="question-card">
+                        <div class="question-text">${question.text}</div>
+                        <div class="options">${optionsHtml}</div>
+                    </div>
+                `;
+                
+                // 更新进度
+                updateProgress();
+                // 更新按钮状态
+                updateButtons();
+            }
+        }
+        
+        // 选择答案 - 修复版本
+        function selectAnswer(questionIndex, answerIndex) {
+            // 保存答案
+            answers[questionIndex] = answerIndex;
+            
+            // 重新渲染当前问题以更新选中状态
+            showQuestion(questionIndex);
+            
+            // 关键修复：强制启用下一题按钮
+            const nextBtn = document.getElementById('next-question');
+            if (nextBtn) {
+                nextBtn.disabled = false;
+            }
+        }
+        
+        // 更新进度
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            
+            if (progressBar) progressBar.style.width = `${progress}%`;
+            if (progressText) progressText.textContent = `${currentQuestion + 1}/${totalQuestions}`;
+        }
+        
+        // 更新按钮状态 - 修复版本
+        function updateButtons() {
+            const prevBtn = document.getElementById('prev-question');
+            const nextBtn = document.getElementById('next-question');
+            const submitBtn = document.getElementById('submit-assessment');
+            
+            if (prevBtn) {
+                prevBtn.disabled = currentQuestion === 0;
+            }
+            
+            // 关键修复：确保下一题按钮状态正确
+            if (nextBtn) {
+                const hasAnswer = answers[currentQuestion] !== undefined;
+                nextBtn.disabled = !hasAnswer;
+            }
+            
+            // 如果是最后一题，显示提交按钮
+            if (submitBtn) {
+                const isLastQuestion = currentQuestion === totalQuestions - 1;
+                submitBtn.style.display = isLastQuestion ? 'inline-flex' : 'none';
+                if (nextBtn) {
+                    nextBtn.style.display = isLastQuestion ? 'none' : 'inline-flex';
+                }
+            }
+        }
+        
+        // 上一题
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            }
+        }
+        
+        // 下一题 - 修复版本
+        function nextQuestion() {
+            // 再次检查当前问题是否已回答
+            if (answers[currentQuestion] === undefined) {
+                alert('请先选择当前问题的答案');
+                return;
+            }
+            
+            if (currentQuestion < totalQuestions - 1) {
+                showQuestion(currentQuestion + 1);
+            } else {
+                // 如果是最后一题，提交评估
+                submitAssessment();
+            }
+        }
+        
+        // 提交评估
+        function submitAssessment() {
+            // 检查是否所有问题都已回答
+            let allAnswered = true;
+            for (let i = 0; i < totalQuestions; i++) {
+                if (answers[i] === undefined) {
+                    allAnswered = false;
+                    break;
+                }
+            }
+            
+            if (!allAnswered) {
+                alert(`您还有 ${totalQuestions - answers.filter(a => a !== undefined).length} 个问题未回答，请完成所有问题后再提交。`);
+                return;
+            }
+            
+            // 计算分数
+            let totalScore = 0;
+            answers.forEach(answer => {
+                if (answer !== undefined) {
+                    // 答案0-4对应分数5-1（反向计分）
+                    totalScore += (4 - answer) + 1;
+                }
+            });
+            
+            const maxScore = totalQuestions * 5;
+            const matchScore = Math.round((totalScore / maxScore) * 100);
+            
+            // 更新结果页面
+            document.getElementById('match-score').textContent = `${matchScore}%`;
+            
+            // 生成推荐内容
+            generateRecommendations(matchScore);
+            
+            // 显示结果页面
+            showSection('result');
+        }
+        
+        // 生成推荐内容
+        function generateRecommendations(score) {
+            const recommendationList = document.getElementById('recommendation-list');
+            const actionPlanContent = document.getElementById('action-plan-content');
+            
+            if (!recommendationList || !actionPlanContent) return;
+            
+            let recommendationsHtml = '';
+            let actionPlanHtml = '';
+            
+            if (score >= 80) {
+                recommendationsHtml = `
+                    <div class="recommendation-item">
+                        <h4>1. 医疗管理 (匹配度: ${score}%)</h4>
+                        <p>医院管理、科室主任、医疗质量管控等。您的领导力和管理能力突出，适合向管理方向发展。</p>
+                    </div>
+                    <div class="recommendation-item">
+                        <h4>2. 医学教育 (匹配度: ${Math.round(score * 0.85)}%)</h4>
+                        <p>医学院教师、临床培训师、医学教育管理。您有较强的教学和沟通能力。</p>
+                    </div>
+                    <div class="recommendation-item">
+                        <h4>3. 数字医疗 (匹配度: ${Math.round(score * 0.75)}%)</h4>
+                        <p>医疗信息化、健康科技、远程医疗。您对新技术有较强兴趣。</p>
+                    </div>
+                `;
+                
+                actionPlanHtml = `
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>技能提升</h4>
+                            <p>针对医疗管理方向，建议重点提升领导力、沟通能力、抗压能力等核心能力。</p>
+                        </div>
+                    </div>
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>学习资源</h4>
+                            <p>推荐参加医院管理培训课程、医疗质量改进研讨会，阅读管理类书籍。</p>
+                        </div>
+                    </div>
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>社群支持</h4>
+                            <p>加入女性医护管理社群，与同行交流经验，获得mentor指导。</p>
+                        </div>
+                    </div>
+                `;
+            } else if (score >= 60) {
+                recommendationsHtml = `
+                    <div class="recommendation-item">
+                        <h4>1. 医学教育 (匹配度: ${score}%)</h4>
+                        <p>医学院教师、临床培训师、医学教育管理。您的教学和沟通能力较强。</p>
+                    </div>
+                    <div class="recommendation-item">
+                        <h4>2. 数字医疗 (匹配度: ${Math.round(score * 0.75)}%)</h4>
+                        <p>医疗信息化、健康科技、远程医疗。您对新技术有一定兴趣。</p>
+                    </div>
+                    <div class="recommendation-item">
+                        <h4>3. 医学研究 (匹配度: ${Math.round(score * 0.65)}%)</h4>
+                        <p>临床研究、基础医学研究、科研项目管理。您有一定的研究兴趣。</p>
+                    </div>
+                `;
+                
+                actionPlanHtml = `
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>技能提升</h4>
+                            <p>建议提升教学能力、沟通技巧和专业知识更新能力。</p>
+                        </div>
+                    </div>
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>学习资源</h4>
+                            <p>参加教学技能培训、教育技术应用课程，积累教学经验。</p>
+                        </div>
+                    </div>
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>社群支持</h4>
+                            <p>加入女性医护教育社群，分享教学经验，共同成长。</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                recommendationsHtml = `
+                    <div class="recommendation-item">
+                        <h4>1. 继续临床工作 (匹配度: ${100 - score}%)</h4>
+                        <p>建议继续在临床岗位发展，深化专业领域技能，同时探索其他可能性。</p>
+                    </div>
+                    <div class="recommendation-item">
+                        <h4>2. 技能提升计划</h4>
+                        <p>建议参加相关培训，提升综合能力后再考虑转型方向。</p>
+                    </div>
+                    <div class="recommendation-item">
+                        <h4>3. 探索其他方向</h4>
+                        <p>可以尝试参与不同项目，了解自己的兴趣和优势，再决定转型方向。</p>
+                    </div>
+                `;
+                
+                actionPlanHtml = `
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>自我评估</h4>
+                            <p>建议进行更深入的自我评估，明确职业兴趣和发展方向。</p>
+                        </div>
+                    </div>
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>技能培训</h4>
+                            <p>参加基础技能培训，提升沟通、团队协作等通用能力。</p>
+                        </div>
+                    </div>
+                    <div class="action-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>社群支持</h4>
+                            <p>加入女性医护互助社群，获得情感支持和职业指导。</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            recommendationList.innerHTML = recommendationsHtml;
+            actionPlanContent.innerHTML = actionPlanHtml;
+        }
+        
+        // 重新测试
+        function restartTest() {
+            // 重置状态
+            currentSection = 'welcome';
+            currentQuestion = 0;
+            answers = [];
+            
+            // 重置表单
+            document.getElementById('user-info-form').reset();
+            
+            // 显示欢迎页面
+            showSection('welcome');
+        }
+        
+        // 下载报告
+        function downloadReport() {
+            const reportContent = `
+女性医护职业转型评估报告
+============================
+
+评估时间：${new Date().toLocaleDateString('zh-CN')}
+总体匹配度：${document.getElementById('match-score').textContent}
+
+一、项目介绍
+-----------
+女性医护职业转型支持计划
+公益自发 · 女性自主 · 同行助力
+微信ID: zyzxznz2021
+
+二、评估结果摘要
+---------------
+${Array.from(document.querySelectorAll('.recommendation-item')).map((item, index) => {
+    const title = item.querySelector('h4').textContent;
+    const desc = item.querySelector('p').textContent;
+    return `${title}\n${desc}`;
+}).join('\n\n')}
+
+三、行动计划建议
+---------------
+${Array.from(document.querySelectorAll('.action-item')).map(item => {
+    const title = item.querySelector('h4').textContent;
+    const desc = item.querySelector('p').textContent;
+    return `• ${title}: ${desc}`;
+}).join('\n')}
+
+四、后续支持
+-----------
+1. 加入女性医护转型互助社群
+   微信ID: zyzxznz2021
+   备注"医护转型"优先通过
+
+2. 本项目为公益性质，完全免费
+   由女性医护工作者自发组织
+   所有开发人员均为女性
+
+3. 提供持续的职业发展支持
+   • 经验分享会
+   • 一对一咨询
+   • 资源推荐
+   • 情感支持
+
+----------------------------------------
+女性帮助女性，一起成长，共同前行
+----------------------------------------
+            `;
+            
+            // 创建下载链接
+            const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `女性医护转型报告_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('评估报告已开始下载！\n\n同时建议您添加微信ID: zyzxznz2021\n加入女性医护转型互助社群，获得更多支持。');
+        }
+        
+        // 初始化：页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('女性医护职业转型测试系统 - 增强版已加载');
+            
+            // 显示欢迎页面
+            showSection('welcome');
+        });
+    </script>
+</body>
+</html>

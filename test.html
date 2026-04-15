@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>功能测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>医护职业转型测试系统 - 功能测试</h1>
+    
+    <div class="test-section">
+        <h2>测试1: DOM元素检查</h2>
+        <button onclick="checkDOM()">检查DOM元素</button>
+        <div id="dom-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>测试2: 页面切换</h2>
+        <button onclick="testPageSwitch()">测试页面切换</button>
+        <div id="switch-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>测试3: 打开主应用</h2>
+        <button onclick="window.open('index.html', '_blank')">在新窗口打开主应用</button>
+        <button onclick="window.location.href='index.html'">在当前窗口打开主应用</button>
+    </div>
+    
+    <script>
+        function checkDOM() {
+            const elements = [
+                'welcome-section',
+                'info-section',
+                'assessment-section',
+                'result-section',
+                'start-test',
+                'back-to-welcome',
+                'user-info-form',
+                'prev-question',
+                'next-question',
+                'submit-assessment',
+                'restart-test',
+                'download-report'
+            ];
+            
+            let results = [];
+            let allFound = true;
+            
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    results.push(`✅ 找到元素: #${id}`);
+                } else {
+                    results.push(`❌ 未找到元素: #${id}`);
+                    allFound = false;
+                }
+            });
+            
+            document.getElementById('dom-result').innerHTML = 
+                `<h3>检查结果: ${allFound ? '所有元素都存在' : '部分元素缺失'}</h3>` +
+                results.join('<br>');
+        }
+        
+        function testPageSwitch() {
+            // 测试页面切换逻辑
+            const sections = ['welcome', 'info', 'assessment', 'result'];
+            let currentIndex = 0;
+            
+            function showNextSection() {
+                if (currentIndex < sections.length) {
+                    const sectionId = sections[currentIndex];
+                    document.getElementById('switch-result').innerHTML += 
+                        `切换到页面: ${sectionId}<br>`;
+                    currentIndex++;
+                    setTimeout(showNextSection, 500);
+                } else {
+                    document.getElementById('switch-result').innerHTML += 
+                        '<strong>页面切换测试完成!</strong>';
+                }
+            }
+            
+            document.getElementById('switch-result').innerHTML = 
+                '<h3>页面切换测试:</h3>';
+            showNextSection();
+        }
+        
+        // 页面加载时自动检查
+        window.addEventListener('load', function() {
+            console.log('测试页面已加载');
+            console.log('当前URL:', window.location.href);
+        });
+    </script>
+</body>
+</html>

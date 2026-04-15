@@ -1,0 +1,24 @@
+{
+  "name": "medical-career-test",
+  "version": "2.0.0",
+  "description": "医护职业转型智能测试系统",
+  "main": "index.html",
+  "scripts": {
+    "start": "open index.html",
+    "dev": "python3 -m http.server 8000",
+    "build": "echo '构建完成'"
+  },
+  "keywords": [
+    "medical",
+    "career",
+    "transition",
+    "test",
+    "healthcare",
+    "职业转型",
+    "医护"
+  ],
+  "author": "医护职业转型测试系统开发团队",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

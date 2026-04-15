@@ -1,0 +1,147 @@
+{
+  "medicalRoles": [
+    {
+      "id": "doctor",
+      "name": "医生",
+      "specialties": ["内科", "外科", "儿科", "妇产科", "急诊科", "麻醉科", "影像科", "病理科"],
+      "transitionPaths": ["management", "education", "research", "industry", "publicHealth", "digitalHealth"]
+    },
+    {
+      "id": "nurse",
+      "name": "护士",
+      "specialties": ["临床护理", "护理管理", "专科护理", "社区护理", "老年护理", "重症监护"],
+      "transitionPaths": ["management", "education", "publicHealth", "digitalHealth"]
+    },
+    {
+      "id": "pharmacist",
+      "name": "药剂师",
+      "specialties": ["临床药学", "医院药房", "零售药店", "药品研发", "药品监管"],
+      "transitionPaths": ["management", "research", "industry", "publicHealth"]
+    },
+    {
+      "id": "technician",
+      "name": "医技人员",
+      "specialties": ["医学检验", "医学影像", "病理技术", "康复治疗", "手术室技术"],
+      "transitionPaths": ["management", "education", "industry", "digitalHealth"]
+    },
+    {
+      "id": "administrator",
+      "name": "医疗管理人员",
+      "specialties": ["医院管理", "科室管理", "医疗质量", "医疗信息", "人力资源"],
+      "transitionPaths": ["management", "education", "publicHealth", "digitalHealth"]
+    }
+  ],
+  
+  "transitionOpportunities": {
+    "management": {
+      "jobTitles": ["医院院长", "科室主任", "医疗总监", "质量经理", "运营主管"],
+      "requiredCertifications": ["医院管理师", "医疗质量管理员", "项目管理专业人士"],
+      "averageSalary": "25-50万/年",
+      "growthPotential": "高"
+    },
+    "education": {
+      "jobTitles": ["医学院教授", "临床培训师", "医学教育专员", "模拟教学导师", "课程开发专家"],
+      "requiredCertifications": ["教师资格证", "医学教育证书", "培训师认证"],
+      "averageSalary": "20-40万/年",
+      "growthPotential": "中高"
+    },
+    "research": {
+      "jobTitles": ["临床研究员", "科研项目经理", "数据统计师", "学术编辑", "研究协调员"],
+      "requiredCertifications": ["GCP证书", "科研项目管理", "统计学认证"],
+      "averageSalary": "18-35万/年",
+      "growthPotential": "中"
+    },
+    "industry": {
+      "jobTitles": ["医学顾问", "产品经理", "市场专员", "临床事务经理", "法规事务专员"],
+      "requiredCertifications": ["药品GMP", "医疗器械法规", "市场营销证书"],
+      "averageSalary": "30-60万/年",
+      "growthPotential": "高"
+    },
+    "publicHealth": {
+      "jobTitles": ["疾控专家", "卫生政策分析师", "公共卫生项目经理", "健康促进专员", "流行病学专家"],
+      "requiredCertifications": ["公共卫生硕士", "流行病学证书", "项目管理认证"],
+      "averageSalary": "15-30万/年",
+      "growthPotential": "中"
+    },
+    "digitalHealth": {
+      "jobTitles": ["医疗信息化专家", "健康科技产品经理", "远程医疗顾问", "医疗数据分析师", "AI医疗应用专家"],
+      "requiredCertifications": ["健康信息管理", "数据分析证书", "产品经理认证"],
+      "averageSalary": "25-50万/年",
+      "growthPotential": "很高"
+    }
+  },
+  
+  "trainingResources": {
+    "onlineCourses": [
+      {
+        "platform": "中国大学MOOC",
+        "courses": ["医院管理学", "医学教育导论", "临床研究方法", "公共卫生学", "医疗信息化"]
+      },
+      {
+        "platform": "学堂在线",
+        "courses": ["医疗质量管理", "医学统计学", "健康大数据分析", "医疗政策分析"]
+      },
+      {
+        "platform": "Coursera",
+        "courses": ["Healthcare Management", "Clinical Research", "Public Health", "Digital Health"]
+      }
+    ],
+    "certifications": [
+      "医院管理师（初级/中级/高级）",
+      "医疗质量管理员",
+      "临床研究协调员（CRC）",
+      "药品GMP检查员",
+      "健康管理师",
+      "信息系统项目管理师"
+    ],
+    "professionalAssociations": [
+      "中华医学会",
+      "中国医院协会",
+      "中华护理学会",
+      "中国医师协会",
+      "中国医药教育协会"
+    ]
+  },
+  
+  "successStories": [
+    {
+      "name": "张医生",
+      "originalRole": "心内科医生",
+      "transitionTo": "医疗管理",
+      "currentPosition": "三甲医院副院长",
+      "timeline": "5年",
+      "keySteps": [
+        "完成医院管理硕士课程",
+        "担任科室副主任积累管理经验",
+        "参与医院质量改进项目",
+        "获得医院管理师认证"
+      ]
+    },
+    {
+      "name": "李护士",
+      "originalRole": "ICU护士",
+      "transitionTo": "医学教育",
+      "currentPosition": "护理学院副教授",
+      "timeline": "4年",
+      "keySteps": [
+        "攻读护理学硕士学位",
+        "考取教师资格证",
+        "参与临床带教工作",
+        "发表教学研究论文"
+      ]
+    },
+    {
+      "name": "王药师",
+      "originalRole": "医院药剂师",
+      "transitionTo": "医药产业",
+      "currentPosition": "跨国药企医学事务经理",
+      "timeline": "3年",
+      "keySteps": [
+        "学习药品法规知识",
+        "参与临床试验项目",
+        "建立行业人脉网络",
+        "获得GCP认证"
+      ]
+    }
+  ]
+}

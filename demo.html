@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医护职业转型测试系统 - 项目演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c7be5 0%, #1a5bb8 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #2c7be5;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e3ebf6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section h2 i {
+            font-size: 1.5rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .feature-card {
+            background: #f9fbfd;
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid #e3ebf6;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card h3 {
+            color: #12263f;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-card p {
+            color: #6e84a3;
+            line-height: 1.7;
+        }
+        
+        .file-structure {
+            background: #f9fbfd;
+            border-radius: 10px;
+            padding: 25px;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #e3ebf6;
+        }
+        
+        .file-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #e3ebf6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        
+        .file-item i {
+            color: #2c7be5;
+            width: 20px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: #2c7be5;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1a5bb8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 123, 229, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #2c7be5;
+            border: 2px solid #2c7be5;
+        }
+        
+        .btn-secondary:hover {
+            background: #f9fbfd;
+            transform: translateY(-2px);
+        }
+        
+        .screenshot {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            border: 1px solid #e3ebf6;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #6e84a3;
+            border-top: 1px solid #e3ebf6;
+            background: #f9fbfd;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-stethoscope"></i> 医护职业转型测试系统</h1>
+            <p>基于专业数据分析的医护职业转型评估与建议平台</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2><i class="fas fa-rocket"></i> 项目概述</h2>
+                <p>这是一个完整的Web应用，帮助医护人员评估自身优势、识别转型方向，并提供个性化的职业发展建议。系统基于医疗行业大数据和职业发展模型，为医护人员提供科学的转型指导。</p>
+                
+                <div class="buttons">
+                    <a href="index.html" class="btn btn-primary">
+                        <i class="fas fa-external-link-alt"></i> 打开应用
+                    </a>
+                    <a href="README.md" class="btn btn-secondary">
+                        <i class="fas fa-book"></i> 查看文档
+                    </a>
+                    <button onclick="runServer()" class="btn btn-secondary">
+                        <i class="fas fa-play"></i> 启动本地服务器
+                    </button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><i class="fas fa-star"></i> 核心功能</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <h3><i class="fas fa-chart-line"></i> 专业评估</h3>
+                        <p>10个维度的能力评估，基于医疗行业数据分析，科学评估个人优势与短板。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><i class="fas fa-lightbulb"></i> 智能建议</h3>
+                        <p>6大转型方向匹配算法，个性化推荐最适合的职业发展路径。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><i class="fas fa-road"></i> 发展路径</h3>
+                        <p>详细的行动计划，包括技能提升、学习资源、实践机会等具体建议。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><i class="fas fa-mobile-alt"></i> 响应式设计</h3>
+                        <p>完美适配桌面和移动设备，提供流畅的用户体验。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><i class="fas fa-folder-open"></i> 项目结构</h2>
+                <div class="file-structure">
+                    <div class="file-item">
+                        <i class="fas fa-file"></i> index.html - 主应用页面
+                    </div>
+                    <div class="file-item">
+                        <i class="fas fa-folder"></i> css/
+                        <span style="margin-left: 20px; color: #6e84a3;">├── style.css - 样式文件</span>
+                    </div>
+                    <div class="file-item">
+                        <i class="fas fa-folder"></i> js/
+                        <span style="margin-left: 20px; color: #6e84a3;">├── app.js - 主应用逻辑</span>
+                    </div>
+                    <div class="file-item">
+                        <i class="fas fa-folder"></i> data/
+                        <span style="margin-left: 20px; color: #6e84a3;">├── sample-data.json - 示例数据</span>
+                    </div>
+                    <div class="file-item">
+                        <i class="fas fa-file"></i> README.md - 项目文档
+                    </div>
+                    <div class="file-item">
+                        <i class="fas fa-file"></i> start.sh - 启动脚本
+                    </div>
+                    <div class="file-item">
+                        <i class="fas fa-file"></i> demo.html - 演示页面（当前）
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><i class="fas fa-cogs"></i> 技术特点</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <h3><i class="fas fa-code"></i> 纯前端技术</h3>
+                        <p>使用HTML5、CSS3、JavaScript(ES6+)开发，无需后端服务器，部署简单。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><i class="fas fa-shield-alt"></i> 数据安全</h3>
+                        <p>所有数据仅在浏览器本地处理，不收集个人隐私信息，保护用户隐私。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><i class="fas fa-puzzle-piece"></i> 模块化设计</h3>
+                        <p>代码结构清晰，易于维护和扩展，支持后续功能添加。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><i class="fas fa-palette"></i> 现代UI</h3>
+                        <p>采用现代化设计风格，友好的用户界面，流畅的交互体验。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><i class="fas fa-play-circle"></i> 快速开始</h2>
+                <p>要运行此应用，您有以下几种选择：</p>
+                
+                <div class="features" style="margin-top: 20px;">
+                    <div class="feature-card">
+                        <h3><i class="fas fa-mouse-pointer"></i> 方法一：直接打开</h3>
+                        <p>双击 <code>index.html</code> 文件，用浏览器直接打开。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><i class="fas fa-terminal"></i> 方法二：本地服务器</h3>
+                        <p>运行 <code>./start.sh</code> 脚本启动HTTP服务器。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><i class="fas fa-cloud-upload-alt"></i> 方法三：在线部署</h3>
+                        <p>部署到GitHub Pages、Netlify等静态网站托管服务。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2026 医护职业转型测试系统 | 版本 1.0.0</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">
+                项目地址: <a href="file:///Users/lxx/Documents/medical-career-test" style="color: #2c7be5;">file:///Users/lxx/Documents/medical-career-test</a>
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        function runServer() {
+            alert('要启动本地服务器，请执行以下步骤：\n\n1. 打开终端\n2. 进入项目目录：cd "/Users/lxx/Documents/medical-career-test"\n3. 运行启动脚本：./start.sh\n\n或者直接双击 start.sh 文件运行。');
+        }
+        
+        // 添加点击效果
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

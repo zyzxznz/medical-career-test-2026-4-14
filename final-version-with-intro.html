@@ -1,0 +1,193 @@
+优势。</p>
+                    </div>
+                `;
+            }
+            
+            recommendationList.innerHTML = recommendationsHtml;
+        }
+        
+        // 生成时间规划
+        function generateTimelinePlan() {
+            const timelineDiv = document.getElementById('timeline-plan');
+            if (!timelineDiv) return;
+            
+            const timelineHtml = `
+                <div class="timeline-item">
+                    <div class="timeline-marker">1-3月</div>
+                    <div class="timeline-content">
+                        <h4>探索与准备阶段</h4>
+                        <p>• 深入了解目标行业<br>
+                           • 参加相关培训课程<br>
+                           • 建立初步人脉网络<br>
+                           • 制定详细转型计划</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">4-6月</div>
+                    <div class="timeline-content">
+                        <h4>技能提升阶段</h4>
+                        <p>• 获取相关证书资质<br>
+                           • 参与实践项目<br>
+                           • 优化简历和面试技巧<br>
+                           • 寻找mentor指导</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">7-12月</div>
+                    <div class="timeline-content">
+                        <h4>转型实施阶段</h4>
+                        <p>• 开始求职或创业<br>
+                           • 完成工作过渡<br>
+                           • 适应新工作环境<br>
+                           • 建立专业声誉</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">1-3年</div>
+                    <div class="timeline-content">
+                        <h4>巩固发展阶段</h4>
+                        <p>• 在新领域建立专业地位<br>
+                           • 持续学习和成长<br>
+                           • 拓展职业网络<br>
+                           • 考虑下一步发展</p>
+                    </div>
+                </div>
+            `;
+            
+            timelineDiv.innerHTML = timelineHtml;
+        }
+        
+        // 生成资源推荐
+        function generateResourceRecommendations() {
+            const resourcesDiv = document.getElementById('resource-recommendations');
+            if (!resourcesDiv) return;
+            
+            const resourcesHtml = `
+                <div class="resource-card">
+                    <h4>在线学习平台</h4>
+                    <p>中国大学MOOC、学堂在线、Coursera等平台的医疗管理、医学教育相关课程。</p>
+                    <a href="#" onclick="return false;">查看推荐课程 →</a>
+                </div>
+                <div class="resource-card">
+                    <h4>专业书籍推荐</h4>
+                    <p>《从医生到管理者》、《护理职业发展指南》、《医疗创业实战》等专业书籍。</p>
+                    <a href="#" onclick="return false;">查看书单 →</a>
+                </div>
+                <div class="resource-card">
+                    <h4>行业会议活动</h4>
+                    <p>医疗管理年会、医学教育论坛、数字医疗峰会等行业交流活动信息。</p>
+                    <a href="#" onclick="return false;">查看活动日历 →</a>
+                </div>
+                <div class="resource-card">
+                    <h4>女性专属社群</h4>
+                    <p>加入女性医护转型互助社群，获得同行支持、经验分享和导师指导。</p>
+                    <a href="#" onclick="alert('请添加微信ID: zyzxznz2021 加入社群')">立即加入 →</a>
+                </div>
+            `;
+            
+            resourcesDiv.innerHTML = resourcesHtml;
+        }
+        
+        // 下载增强版报告
+        function downloadEnhancedReport() {
+            const reportContent = `
+女性医护职业转型分析报告
+============================
+
+评估时间：${new Date().toLocaleDateString('zh-CN')}
+总体匹配度：${document.getElementById('match-score').textContent}
+
+一、个人背景
+------------
+当前职位：${userInfo.currentRole}
+工作年限：${userInfo.experience}
+最高学历：${userInfo.education}
+专业领域：${userInfo.specialty}
+转型意向：${userInfo.transitionGoals.join('、')}
+
+二、能力分析
+------------
+${Array.from(document.querySelectorAll('.ability-item')).map(item => {
+    const title = item.querySelector('h4').textContent;
+    const score = item.querySelector('div:nth-child(3)').textContent;
+    return `${title}: ${score}`;
+}).join('\n')}
+
+三、推荐转型方向
+----------------
+${Array.from(document.querySelectorAll('.recommendation-item')).map((item, index) => {
+    const title = item.querySelector('h4').textContent;
+    const desc = item.querySelector('p').textContent;
+    return `${title}\n${desc}`;
+}).join('\n\n')}
+
+四、转型时间规划
+----------------
+${Array.from(document.querySelectorAll('.timeline-item')).map(item => {
+    const period = item.querySelector('.timeline-marker').textContent;
+    const title = item.querySelector('.timeline-content h4').textContent;
+    const content = item.querySelector('.timeline-content p').textContent;
+    return `${period} - ${title}\n${content}`;
+}).join('\n\n')}
+
+五、支持资源
+------------
+1. 加入女性医护转型互助社群
+   微信ID: zyzxznz2021
+   备注"医护转型"优先通过
+
+2. 本项目为公益性质，完全免费
+   由女性医护工作者自发组织
+   所有开发人员均为女性
+
+六、后续行动建议
+----------------
+1. 添加微信加入社群，获得同行支持
+2. 根据推荐方向开始探索和学习
+3. 按照时间规划逐步实施转型
+4. 定期回顾进展，调整计划
+
+----------------------------------------
+女性医护职业转型支持计划
+公益自发 · 女性自主 · 同行助力
+微信ID: zyzxznz2021
+----------------------------------------
+            `;
+            
+            // 创建下载链接
+            const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `女性医护转型报告_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('报告已开始下载！\n\n同时建议您添加微信ID: zyzxznz2021\n加入女性医护转型互助社群，获得更多支持。');
+        }
+        
+        // 重新测试
+        function restartTest() {
+            // 重置状态
+            currentSection = 'welcome';
+            currentQuestion = 0;
+            answers = [];
+            userInfo = {};
+            
+            // 重置表单
+            document.getElementById('user-info-form').reset();
+            
+            // 显示欢迎页面
+            showSection('welcome');
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('女性医护职业转型测试系统 - 增强版已加载');
+            showSection('welcome');
+        });
+    </script>
+</body>
+</html>

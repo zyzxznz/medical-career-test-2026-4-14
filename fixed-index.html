@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医护职业转型测试系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- 内联JavaScript确保立即执行 -->
+    <script>
+        // 确保DOM完全加载后再执行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM已完全加载，开始初始化应用...');
+            
+            // 简单的页面切换函数
+            function showSection(sectionId) {
+                // 隐藏所有部分
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // 显示目标部分
+                const targetSection = document.getElementById(sectionId + '-section');
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    console.log('切换到页面:', sectionId);
+                    
+                    // 滚动到顶部
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+            
+            // 初始化事件监听器
+            function initEventListeners() {
+                console.log('初始化事件监听器...');
+                
+                // 开始测试按钮
+                const startBtn = document.getElementById('start-test');
+                if (startBtn) {
+                    console.log('找到开始测试按钮');
+                    startBtn.addEventListener('click', function() {
+                        console.log('开始测试按钮被点击');
+                        showSection('info');
+                    });
+                } else {
+                    console.error('未找到开始测试按钮');
+                }
+                
+                // 返回欢迎页面按钮
+                const backBtn = document.getElementById('back-to-welcome');
+                if (backBtn) {
+                    backBtn.addEventListener('click', function() {
+                        showSection('welcome');
+                    });
+                }
+                
+                // 个人信息表单
+                const userForm = document.getElementById('user-info-form');
+                if (userForm) {
+                    userForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        console.log('个人信息表单提交');
+                        
+                        // 验证必填字段
+                        const currentRole = document.getElementById('current-role').value;
+                        const experience = document.getElementById('experience').value;
+                        const education = document.getElementById('education').value;
+                        const specialty = document.getElementById('specialty').value;
+                        
+                        if (!currentRole || !experience || !education || !specialty) {
+                            alert('请填写所有必填字段');
+                            return;
+                        }
+                        
+                        // 切换到评估页面
+                        showSection('assessment');
+                        
+                        // 显示第一个问题
+                        showFirstQuestion();
+                    });
+                }
+                
+                // 上一题按钮
+                const prevBtn = document.getElementById('prev-question');
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', function() {
+                        console.log('上一题');
+                        // 这里可以添加切换题目的逻辑
+                    });
+                }
+                
+                // 下一题按钮
+                const nextBtn = document.getElementById('next-question');
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', function() {
+                        console.log('下一题');
+                        // 这里可以添加切换题目的逻辑
+                    });
+                }
+                
+                // 提交评估按钮
+                const submitBtn = document.getElementById('submit-assessment');
+                if (submitBtn) {
+                    submitBtn.addEventListener('click', function() {
+                        console.log('提交评估');
+                        showSection('result');
+                    });
+                }
+                
+                // 重新测试按钮
+                const restartBtn = document.getElementById('restart-test');
+                if (restartBtn) {
+                    restartBtn.addEventListener('click', function() {
+                        console.log('重新测试');
+                        
+                        // 重置表单
+                        const userForm = document.getElementById('user-info-form');
+                        if (userForm) {
+                            userForm.reset();
+                        }
+                        
+                        // 返回欢迎页面
+                        showSection('welcome');
+                    });
+                }
+                
+                // 下载报告按钮
+                const downloadBtn = document.getElementById('download-report');
+                if (downloadBtn) {
+                    downloadBtn.addEventListener('click', function() {
+                        alert('报告下载功能正在开发中...');
+                    });
+                }
+            }
+            
+            // 显示第一个问题
+            function showFirstQuestion() {
+                const questionContainer = document.getElementById('question-container');
+                if (!questionContainer) return;
+                
+                questionContainer.innerHTML = `
+                    <div class="question-card">
+                        <div class="question-text">您是否享受带领团队、制定工作计划和分配任务的过程？</div>
+                        <div class="options">
+                            <div class="option" data-value="5">
+                                <input type="radio" name="question-1" value="5" id="option-1">
+                                <label class="option-label" for="option-1">非常享受，这是我的强项</label>
+                            </div>
+                            <div class="option" data-value="4">
+                                <input type="radio" name="question-1" value="4" id="option-2">
+                                <label class="option-label" for="option-2">比较享受，有一定经验</label>
+                            </div>
+                            <div class="option" data-value="3">
+                                <input type="radio" name="question-1" value="3" id="option-3">
+                                <label class="option-label" for="option-3">一般，可以接受</label>
+                            </div>
+                            <div class="option" data-value="2">
+                                <input type="radio" name="question-1" value="2" id="option-4">
+                                <label class="option-label" for="option-4">不太喜欢，更愿意专注技术</label>
+                            </div>
+                            <div class="option" data-value="1">
+                                <input type="radio" name="question-1" value="1" id="option-5">
+                                <label class="option-label" for="option-5">完全不喜欢，避免管理职责</label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // 添加选项点击事件
+                document.querySelectorAll('.option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        document.querySelectorAll('.option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                        this.querySelector('input').checked = true;
+                        
+                        // 启用下一题按钮
+                        const nextBtn = document.getElementById('next-question');
+                        if (nextBtn) {
+                            nextBtn.disabled = false;
+                        }
+                    });
+                });
+            }
+            
+            // 初始化应用
+            initEventListeners();
+            console.log('应用初始化完成');
+            
+            // 显示欢迎页面
+            showSection('welcome');
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-stethoscope"></i>
+                <h1>医护职业转型测试系统</h1>
+            </div>
+            <p class="subtitle">基于专业数据分析的医护职业转型评估与建议</p>
+        </header>
+
+        <main>
+            <!-- 欢迎页面 -->
+            <section id="welcome-section" class="section active">
+                <div class="welcome-card">
+                    <div class="welcome-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h2>欢迎使用医护职业转型测试</h2>
+                    <p class="welcome-description">
+                        本测试系统基于医疗行业大数据和职业发展模型，帮助医护人员评估自身优势、识别转型方向，并提供个性化的职业发展建议。
+                    </p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>专业评估</h3>
+                            <p>基于医疗行业数据分析</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-lightbulb"></i>
+                            <h3>智能建议</h3>
+                            <p>个性化转型路径推荐</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-road"></i>
+                            <h3>发展路径</h3>
+                            <p>清晰的职业发展路线图</p>
+                        </div>
+                    </div>
+                    <button id="start-test" class="btn-primary">
+                        <i class="fas fa-play-circle"></i> 开始测试
+                    </button>
+                </div>
+            </section>
+
+            <!-- 个人信息页面 -->
+            <section id="info-section" class="section">
+                <div class="form-card">
+                    <h2><i class="fas fa-user-md"></i> 个人信息</h2>
+                    <p class="form-description">请填写基本信息，以便为您提供更精准的评估</p>
+                    
+                    <form id="user-info-form">
+                        <div class="form-group">
+                            <label for="current-role"><i class="fas fa-briefcase-medical"></i> 当前职位</label>
+                            <select id="current-role" required>
+                                <option value="">请选择当前职位</option>
+                                <option value="doctor">医生</option>
+                                <option value="nurse">护士</option>
+                                <option value="pharmacist">药剂师</option>
+                                <option value="technician">医技人员</option>
+                                <option value="administrator">医疗管理人员</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="experience"><i class="fas fa-calendar-alt"></i> 工作年限</label>
+                            <select id="experience" required>
+                                <option value="">请选择工作年限</option>
+                                <option value="0-3">0-3年</option>
+                                <option value="3-5">3-5年</option>
+                                <option value="5-10">5-10年</option>
+                                <option value="10-15">10-15年</option>
+                                <option value="15+">15年以上</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="education"><i class="fas fa-graduation-cap"></i> 最高学历</label>
+                            <select id="education" required>
+                                <option value="">请选择学历</option>
+                                <option value="bachelor">本科</option>
+                                <option value="master">硕士</option>
+                                <option value="doctor">博士</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="specialty"><i class="fas fa-clinic-medical"></i> 专业领域</label>
+                            <input type="text" id="specialty" placeholder="如：内科、外科、护理管理等" required>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" id="back-to-welcome" class="btn-secondary">
+                                <i class="fas fa-arrow-left"></i> 返回
+                            </button>
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-arrow-right"></i> 下一步：能力评估
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 能力评估页面 -->
+            <section id="assessment-section" class="section">
+                <div class="assessment-card">
+                    <div class="assessment-header">
+                        <h2><i class="fas fa-clipboard-check"></i> 能力评估</h2>
+                        <div class="progress">
+                            <div class="progress-bar" id="progress-bar"></div>
+                            <span id="progress-text">1/10</span>
+                        </div>
+                    </div>
+
+                    <div id="question-container">
+                        <!-- 问题将通过JavaScript动态加载 -->
+                    </div>
+
+                    <div class="assessment-actions">
+                        <button id="prev-question" class="btn-secondary" disabled>
+                            <i class="fas fa-chevron-left"></i> 上一题
+                        </button>
+                        <button id="next-question" class="btn-primary" disabled>
+                            下一题 <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button id="submit-assessment" class="btn-success" style="display: none;">
+                            <i class="fas fa-paper-plane"></i> 提交评估
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 结果页面 -->
+            <section id="result-section" class="section">
+                <div class="result-card">
+                    <div class="result-header">
+                        <div class="result-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h2>评估结果</h2>
+                        <p class="result-subtitle">基于您的专业背景和能力评估</p>
+                    </div>
+
+                    <div class="result-content">
+                        <div class="score-card">
+                            <h3><i class="fas fa-chart-bar"></i> 转型匹配度</h3>
+                            <div class="score-circle">
+                                <div class="score-value" id="match-score">85%</div>
+                                <div class="score-label">总体匹配度</div>
+                            </div>
+                        </div>
+
+                        <div class="recommendations">
+                            <h3><i class="fas fa-lightbulb"></i> 推荐转型方向</h3>
+                            <div id="recommendation-list">
+                                <div class="recommendation-item">
+                                    <h4>1. 医疗管理 (匹配度: 85%)</h4>
+                                    <p>医院管理、科室主任、医疗质量管控等</p>
+                                </div>
+                                <div class="recommendation-item">
+                                    <h4>2. 医学教育 (匹配度: 72%)</h4>
+                                    <p>医学院教师、临床培训师、医学教育管理</p>
+                                </div>
+                                <div class="recommendation-item">
+                                    <h4>3. 数字医疗 (匹配度: 65%)</h4>
+                                    <p>医疗信息化、健康科技、远程医疗</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="action-plan">
+                            <h3><i class="fas fa-road"></i> 行动计划建议</h3>
+                            <div id="action-plan-content">
+                                <div class="action-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <div>
+                                        <h4>技能提升</h4>
+                                        <p>针对医疗管理方向，建议重点提升领导力、沟通能力、抗压能力等核心能力。</p>
+                                    </div>
+                                </div>
+                                <div class="action-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <div>
+                                        <h4>学习资源</h4>
+                                        <p>推荐参加相关培训课程、行业会议，阅读专业书籍和期刊，建立专业知识体系。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-actions">
+                        <button id="restart-test" class="btn-primary">
+                            <i class="fas fa-redo"></i> 重新测试
+                        </button>
+                        <button id="download-report" class="btn-secondary">
+                            <i class="fas fa-download"></i> 下载报告
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>© 2026 医护职业转型测试系统 | 基于医疗行业数据分析的专业评估工具</p>
+            <p class="footer-links">
+                <a href="#"><i class="fas fa-question-circle"></i> 使用说明</a>
+                <a href="#"><i class="fas fa-shield-alt"></i> 隐私政策</a>
+                <a href="#"><i class="fas fa-envelope"></i> 联系我们</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
