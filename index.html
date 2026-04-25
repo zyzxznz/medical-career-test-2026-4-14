@@ -244,6 +244,9 @@
                         <button id="restart-test" class="btn-primary" onclick="restartTest()">
                             <i class="fas fa-redo"></i> 重新测试
                         </button>
+                        <button id="view-personal-report" class="btn-primary" style="background: #2c5282;">
+                            <i class="fas fa-file-alt"></i> 查看个性化报告
+                        </button>
                         <button id="download-report" class="btn-secondary" onclick="downloadReport()">
                             <i class="fas fa-download"></i> 下载报告
                         </button>
@@ -613,12 +616,18 @@
                 return;
             }
             
+            // 10项能力类别的映射
+            const abilityCategories = ['leadership', 'teaching', 'research', 'innovation', 'communication', 'tech', 'stress', 'learning', 'policy', 'entrepreneur'];
+            
             // 计算分数
             let totalScore = 0;
-            answers.forEach(answer => {
+            const abilityScores = {};
+            answers.forEach((answer, index) => {
                 if (answer !== undefined) {
                     // 答案0-4对应分数5-1（反向计分）
-                    totalScore += (4 - answer) + 1;
+                    const score = (4 - answer) + 1;
+                    totalScore += score;
+                    abilityScores[abilityCategories[index]] = score;
                 }
             });
             
@@ -626,12 +635,47 @@
             const matchScore = Math.round((totalScore / maxScore) * 100);
             
             console.log(`得分: ${totalScore}/${maxScore} = ${matchScore}%`);
+            console.log('能力得分:', abilityScores);
             
             // 更新结果页面
             document.getElementById('match-score').textContent = `${matchScore}%`;
             
             // 生成推荐内容
             generateRecommendations(matchScore);
+            
+            // 收集用户信息
+            const currentRole = document.getElementById('current-role').value;
+            const experience = document.getElementById('experience').value;
+            const education = document.getElementById('education').value;
+            const specialty = document.getElementById('specialty').value;
+            const transitionGoals = [];
+            document.querySelectorAll('input[name="transition-goals"]:checked').forEach(checkbox => {
+                transitionGoals.push(checkbox.value);
+            });
+            
+            // 保存到localStorage供个性化报告使用
+            const testResults = {
+                scores: {
+                    abilityScores: abilityScores
+                },
+                userInfo: {
+                    currentRole: currentRole,
+                    experience: experience,
+                    education: education,
+                    specialty: specialty,
+                    transitionGoals: transitionGoals
+                },
+                reportMatch: {
+                    matchScore: matchScore
+                }
+            };
+            
+            try {
+                localStorage.setItem('careerTestResults', JSON.stringify(testResults));
+                console.log('测试结果已保存到 localStorage');
+            } catch (err) {
+                console.error('保存测试结果到 localStorage 失败:', err);
+            }
             
             // 显示结果页面
             showSection('result');
@@ -769,6 +813,16 @@
         function downloadReport() {
             alert('报告下载功能正在开发中...\n\n您的评估结果已保存，稍后可通过邮件接收详细报告。');
         }
+        
+        // 查看个性化报告
+        document.addEventListener('DOMContentLoaded', function() {
+            const viewReportBtn = document.getElementById('view-personal-report');
+            if (viewReportBtn) {
+                viewReportBtn.addEventListener('click', function() {
+                    window.location.href = 'personalized-report.html';
+                });
+            }
+        });
         
         // 初始化：页面加载完成后执行
         document.addEventListener('DOMContentLoaded', function() {

@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 industry: 0,
                 publicHealth: 0,
                 digitalHealth: 0
-            }
+            },
+            abilityScores: {}
         },
         results: {
             matchScore: 0,
@@ -210,7 +211,8 @@ document.addEventListener('DOMContentLoaded', function() {
         nextQuestion: document.getElementById('next-question'),
         submitAssessment: document.getElementById('submit-assessment'),
         restartTest: document.getElementById('restart-test'),
-        downloadReport: document.getElementById('download-report')
+        downloadReport: document.getElementById('download-report'),
+        viewPersonalReport: document.getElementById('view-personal-report')
     };
 
     const progressElements = {
@@ -312,12 +314,18 @@ document.addEventListener('DOMContentLoaded', function() {
             appState.assessment.scores[key] = 0;
         });
         
-        // 计算各方向分数
+        // 计算10项能力的单项得分
+        const abilityCategories = ['leadership', 'teaching', 'research', 'innovation', 'communication', 'tech', 'stress', 'learning', 'policy', 'entrepreneur'];
+        appState.assessment.abilityScores = {};
+        
         assessmentQuestions.forEach((question, index) => {
             const answer = appState.assessment.answers[index];
             if (!answer) return;
             
-            // 根据问题类别和答案计算分数
+            // 保存单项能力得分
+            appState.assessment.abilityScores[question.category] = answer;
+            
+            // 根据问题类别和答案计算转型方向分数
             switch (question.category) {
                 case 'leadership':
                     appState.assessment.scores.management += answer * 1.5;
@@ -364,6 +372,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
+        // 确保所有能力项都有值（即使某道题没回答）
+        abilityCategories.forEach(cat => {
+            if (appState.assessment.abilityScores[cat] === undefined) {
+                appState.assessment.abilityScores[cat] = 0;
+            }
+        });
+        
         // 考虑用户选择的转型意向
         appState.userInfo.transitionGoals.forEach(goal => {
             if (appState.assessment.scores[goal]) {
@@ -398,6 +413,26 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 生成行动计划
         generateActionPlan();
+        
+        // --- 保存数据到 localStorage，供个性化报告页面读取 ---
+        const testResults = {
+            scores: {
+                abilityScores: appState.assessment.abilityScores,
+                directionScores: appState.assessment.scores
+            },
+            userInfo: appState.userInfo,
+            reportMatch: {
+                matchScore: appState.results.matchScore,
+                topRecommendation: appState.results.recommendations[0] || null
+            }
+        };
+        
+        try {
+            localStorage.setItem('careerTestResults', JSON.stringify(testResults));
+            console.log('测试结果已保存到 localStorage');
+        } catch (err) {
+            console.error('保存测试结果到 localStorage 失败:', err);
+        }
     }
 
     // 生成行动计划
@@ -589,6 +624,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // 返回欢迎页面
                 showSection('welcome');
+            });
+        }
+        
+        // 查看个性化报告按钮
+        if (buttons.viewPersonalReport) {
+            buttons.viewPersonalReport.addEventListener('click', () => {
+                window.location.href = 'personalized-report.html';
             });
         }
         
