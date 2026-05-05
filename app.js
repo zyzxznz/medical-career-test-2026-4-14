@@ -212,6 +212,44 @@
             return 'uncertain';
         }
         
+        // 分析away用户的转型方向（根据问题6的选项组合推断）
+        function analyzeAwayDirection(reasons) {
+            // 原因分类：
+            // 轻松需求：tired/健康/stress/夜班/假期少/想正常生活
+            // 收入需求：钱太少/收入不对等
+            // 发展需求：职业发展空间受限
+            // 环境需求：医患关系/管理问题
+            // 稳定需求：考公/体制内
+            
+            const balanceReasons = ['tired', 'health', 'stress', 'night-shift', 'no-holiday', 'work-life'];
+            const incomeReasons = ['low-pay', 'unfair-pay'];
+            const developmentReasons = ['career-limit'];
+            const environmentReasons = ['doctor-relation', 'management'];
+            const stabilityReasons = ['system-entry'];
+            
+            let balance = 0, income = 0, development = 0, environment = 0, stability = 0;
+            
+            for (const reason of reasons) {
+                if (balanceReasons.includes(reason)) balance++;
+                if (incomeReasons.includes(reason)) income++;
+                if (developmentReasons.includes(reason)) development++;
+                if (environmentReasons.includes(reason)) environment++;
+                if (stabilityReasons.includes(reason)) stability++;
+            }
+            
+            // 返回得分最高的分类
+            const scores = [
+                { dir: 'balance', score: balance, label: '工作生活平衡', desc: '你更看重轻松的生活节奏和工作时间' },
+                { dir: 'income', score: income, label: '收入提升', desc: '你更看重经济回报' },
+                { dir: 'development', score: development, label: '职业发展', desc: '你更看重职业成长空间' },
+                { dir: 'environment', score: environment, label: '工作环境', desc: '你更看重和谐的工作环境' },
+                { dir: 'stability', score: stability, label: '稳定保障', desc: '你更看重稳定的工作编制' }
+            ];
+            
+            scores.sort((a, b) => b.score - a.score);
+            return scores[0].score > 0 ? scores[0] : { dir: 'balance', score: 0, label: '工作生活平衡', desc: '你更看重轻松的生活节奏' };
+        }
+        
         // 提交个人信息
         function submitUserInfo() {
             console.log('提交个人信息表单');
@@ -264,14 +302,22 @@
             // 根据问题5+6判断职业方向分类
             const category = determineCareerCategory(otherCareerValue, transitionReasons);
             careerPreference.category = category;
-            console.log('职业偏好:', careerPreference);
-            console.log('职业方向分类:', category);
             
-            // 远离医疗远离临床 → 提示开发中
+            // 分析away用户的转型方向
             if (category === 'away') {
-                alert('感谢您的回答！\n\n根据您的职业发展意愿，该分支的测试题目正在开发中，敬请期待！');
+                const awayDirection = analyzeAwayDirection(transitionReasons);
+                careerPreference.awayDirection = awayDirection;
+                console.log('Away方向分析:', awayDirection);
+                console.log('职业偏好:', careerPreference);
+                console.log('Away分类:', category, '— 准备away分支的专属测试');
+                // 继续away分支的测试
+                adjustQuestionsForPreference();
+                showSection('assessment');
                 return false;
             }
+            
+            console.log('职业偏好:', careerPreference);
+            console.log('职业方向分类:', category, '— 继续原有测试流程');
             
             // 继续原有流程（转型意向将在能力评估第一题中收集）
             adjustQuestionsForPreference();
