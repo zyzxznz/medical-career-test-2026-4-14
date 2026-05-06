@@ -148,25 +148,40 @@ const DIRECTION_NAME_MAP = {
   '自由职业/独立执业': '自由职业/独立执业'
 };
 
-// 辅助函数：在报告的推荐方向中查找匹配的内容
+// 辅助函数：在报告数据中根据方向名查找匹配的内容
+// 1. 先精确匹配当前报告
+// 2. 尝试映射名匹配当前报告
+// 3. 跨报告回退：在所有报告中查找第一个匹配
 function findDirectionContent(report, directionName) {
-  if (!report) return null;
-  // 先尝试精确匹配
-  const sections = ['primaryRecommendation', 'secondaryRecommendation', 'thirdRecommendation'];
-  for (const key of sections) {
-    if (report[key] && report[key].name === directionName) {
-      return report[key];
-    }
-  }
-  // 尝试映射匹配（测试页方向名→报告数据标准名）
-  const mappedName = DIRECTION_NAME_MAP[directionName];
-  if (mappedName && mappedName !== directionName) {
+  // 获取映射后的标准方向名
+  const targetName = DIRECTION_NAME_MAP[directionName] || directionName;
+  
+  // 第一步：在当前报告中精确匹配
+  if (report) {
+    const sections = ['primaryRecommendation', 'secondaryRecommendation', 'thirdRecommendation'];
     for (const key of sections) {
-      if (report[key] && report[key].name === mappedName) {
+      if (report[key] && report[key].name === targetName) {
         return report[key];
       }
     }
   }
+  
+  // 第二步：跨报告回退，在所有报告中查找目标方向的内容
+  for (const otherReport of reportData) {
+    if (otherReport === report) continue; // 跳过已检查的当前报告
+    const sections = ['primaryRecommendation', 'secondaryRecommendation', 'thirdRecommendation'];
+    for (const key of sections) {
+      if (otherReport[key] && otherReport[key].name === targetName) {
+        // 复制一份，标记为跨报告匹配，避免修改原始数据
+        return {
+          name: targetName,
+          strengths: otherReport[key].strengths,
+          positions: otherReport[key].positions
+        };
+      }
+    }
+  }
+  
   return null;
 }
 
