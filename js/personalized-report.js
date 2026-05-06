@@ -184,16 +184,19 @@ function generateReportData(scores, userInfo, testResults) {
   }
   
   // 构建方向分析数据
+  const MAX_POSSIBLE_SCORE = 75; // 与app.js一致: 10题 × 5分 × 1.5权重
   let directionAnalysis;
   if (testRecommendations) {
     directionAnalysis = testRecommendations.map((rec, index) => {
+      // 重新计算匹配度（不依赖缓存值，兼容旧版localStorage数据）
+      const recalcPercentage = rec.score ? Math.round((rec.score / MAX_POSSIBLE_SCORE) * 100) : (rec.matchPercentage || 0);
       // 在报告的推荐中查找匹配此方向的内容
       const matchedContent = findDirectionContent(report, rec.name);
       return {
         rank: index + 1,
         name: rec.name,
-        matchScore: rec.matchPercentage || 0,
-        matchLevel: getMatchLevel(rec.matchPercentage || 0),
+        matchScore: recalcPercentage,
+        matchLevel: getMatchLevel(recalcPercentage),
         strengths: matchedContent ? matchedContent.strengths : [],
         positions: matchedContent ? matchedContent.positions : []
       };
