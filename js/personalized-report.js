@@ -129,15 +129,25 @@ function getMatchLevel(score) {
   return '较低匹配';
 }
 
+// 辅助函数：在报告的推荐方向中查找匹配的内容
+function findDirectionContent(report, directionName) {
+  if (!report) return null;
+  const sections = ['primaryRecommendation', 'secondaryRecommendation', 'thirdRecommendation'];
+  for (const key of sections) {
+    if (report[key] && report[key].name === directionName) {
+      return report[key];
+    }
+  }
+  return null;
+}
+
 // 生成完整的报告展示数据
-function generateReportData(scores, userInfo) {
+function generateReportData(scores, userInfo, testResults) {
   // 匹配报告类型
   const matchResult = matchReport(scores);
   
-  // 计算转型方向得分
+  // 计算转型方向得分（作为fallback）
   const directionResults = calculateDirectionScores(scores);
-  
-  // 按匹配度排序
   const sortedDirections = Object.entries(directionResults.matchPercentages)
     .map(([key, value]) => ({
       key: key,
@@ -147,27 +157,76 @@ function generateReportData(scores, userInfo) {
     }))
     .sort((a, b) => b.score - a.score);
   
-  // 计算转型准备度（使用默认值）
-  const readiness = calculateReadiness(
-    userInfo.economicPressure || 5,
-    userInfo.riskTolerance || 5,
-    userInfo.familySupport || 6,
-    userInfo.learningWillingness || 'part_time'
-  );
-  
-  // 获取转型方向得分排名
-  const topDirections = sortedDirections.slice(0, 3);
-  
   // 获取核心特征
   const report = matchResult.report;
+  
+  // ===== 1. 转型准备度：使用测试题的转型匹配度 =====
+  let readiness;
+  if (testResults && testResults.reportMatch && testResults.reportMatch.matchScore !== undefined) {
+    readiness = testResults.reportMatch.matchScore;
+  } else {
+    // Fallback：旧的计算方式
+    readiness = calculateReadiness(
+      userInfo.economicPressure || 5,
+      userInfo.riskTolerance || 5,
+      userInfo.familySupport || 6,
+      userInfo.learningWillingness || 'part_time'
+    );
+  }
+  
+  // ===== 2&3. 转型方向及方向分析：使用测试题的三个推荐方向 =====
+  let testRecommendations = null;
+  if (testResults && testResults.reportMatch && testResults.reportMatch.recommendations && testResults.reportMatch.recommendations.length > 0) {
+    testRecommendations = testResults.reportMatch.recommendations;
+  } else if (testResults && testResults.reportMatch && testResults.reportMatch.topRecommendation) {
+    // Fallback：仅有一个推荐方向
+    testRecommendations = [testResults.reportMatch.topRecommendation];
+  }
+  
+  // 构建方向分析数据
+  let directionAnalysis;
+  if (testRecommendations) {
+    directionAnalysis = testRecommendations.map((rec, index) => {
+      // 在报告的推荐中查找匹配此方向的内容
+      const matchedContent = findDirectionContent(report, rec.name);
+      return {
+        rank: index + 1,
+        name: rec.name,
+        matchScore: rec.matchPercentage || 0,
+        matchLevel: getMatchLevel(rec.matchPercentage || 0),
+        strengths: matchedContent ? matchedContent.strengths : [],
+        positions: matchedContent ? matchedContent.positions : []
+      };
+    });
+  } else {
+    // Fallback：使用旧的计算方式
+    const topDirections = sortedDirections.slice(0, 3);
+    directionAnalysis = topDirections.map((dir, index) => {
+      let extra = {};
+      if (index === 0 && report) {
+        extra = { strengths: report.primaryRecommendation.strengths, positions: report.primaryRecommendation.positions };
+      } else if (index === 1 && report) {
+        extra = { strengths: report.secondaryRecommendation.strengths, positions: report.secondaryRecommendation.positions };
+      } else if (index === 2 && report && report.thirdRecommendation) {
+        extra = { strengths: report.thirdRecommendation.strengths || [], positions: report.thirdRecommendation.positions || [] };
+      }
+      return {
+        rank: index + 1,
+        name: dir.name,
+        matchScore: dir.score,
+        matchLevel: getMatchLevel(dir.score),
+        ...extra
+      };
+    });
+  }
   
   // 构建执行摘要数据
   const executiveSummary = {
     readiness: readiness,
     readinessLevel: getMatchLevel(readiness),
-    topDirection: topDirections[0]?.name || '待评估',
-    topDirectionScore: topDirections[0]?.score || 0,
-    topDirectionLevel: getMatchLevel(topDirections[0]?.score || 0),
+    topDirection: directionAnalysis[0]?.name || '待评估',
+    topDirectionScore: directionAnalysis[0]?.matchScore || 0,
+    topDirectionLevel: getMatchLevel(directionAnalysis[0]?.matchScore || 0),
     coreTraitsSummary: report ? report.coreTraits.slice(0, 3) : [],
     reportName: report ? report.name : '',
     dominantAbility: abilityNameMap[matchResult.dominantAbility] || matchResult.dominantAbility
@@ -180,35 +239,6 @@ function generateReportData(scores, userInfo) {
     developmentAreas: report ? report.challenges : [],
     description: report ? report.description : ''
   };
-  
-  // 构建方向分析数据
-  const directionAnalysis = topDirections.map((dir, index) => {
-    let extra = {};
-    if (index === 0 && report) {
-      extra = {
-        strengths: report.primaryRecommendation.strengths,
-        positions: report.primaryRecommendation.positions
-      };
-    } else if (index === 1 && report) {
-      extra = {
-        strengths: report.secondaryRecommendation.strengths,
-        positions: report.secondaryRecommendation.positions
-      };
-    } else if (index === 2 && report && report.thirdRecommendation) {
-      extra = {
-        strengths: report.thirdRecommendation.strengths || [],
-        positions: report.thirdRecommendation.positions || []
-      };
-    }
-    
-    return {
-      rank: index + 1,
-      name: dir.name,
-      matchScore: dir.score,
-      matchLevel: getMatchLevel(dir.score),
-      ...extra
-    };
-  });
   
   return {
     executiveSummary,

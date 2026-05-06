@@ -423,7 +423,8 @@ document.addEventListener('DOMContentLoaded', function() {
             userInfo: appState.userInfo,
             reportMatch: {
                 matchScore: appState.results.matchScore,
-                topRecommendation: appState.results.recommendations[0] || null
+                topRecommendation: appState.results.recommendations[0] || null,
+                recommendations: appState.results.recommendations
             }
         };
         

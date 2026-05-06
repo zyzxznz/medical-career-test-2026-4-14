@@ -1002,8 +1002,8 @@
             const scores = testResults.scores || {};
             const abilityScores = scores.abilityScores || {};
             
-            // 生成报告数据
-            const reportData = generateReportData(abilityScores, userInfo);
+            // 生成报告数据（传入完整测试结果，确保与测试结果显示一致）
+            const reportData = generateReportData(abilityScores, userInfo, testResults);
             
             // 渲染报告
             renderReport(reportData, userInfo);
