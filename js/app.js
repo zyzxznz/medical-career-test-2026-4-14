@@ -394,19 +394,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function generateRecommendations() {
         const scores = appState.assessment.scores;
         const maxScore = Math.max(...Object.values(scores));
-        const minScore = Math.min(...Object.values(scores));
+        const maxPossible = assessmentQuestions.length * 5 * 1.5; // 75分满分
         
-        // 计算总体匹配度（归一化到0-100）
-        appState.results.matchScore = Math.round((maxScore / (assessmentQuestions.length * 5 * 1.5)) * 100);
+        // 计算总体匹配度
+        appState.results.matchScore = Math.round((maxScore / maxPossible) * 100);
         
-        // 生成推荐列表（按分数排序）
+        // 生成推荐列表（按分数排序），使用绝对分制而非归一化
         appState.results.recommendations = Object.entries(scores)
             .map(([key, score]) => ({
                 path: key,
                 name: transitionPaths[key].name,
                 description: transitionPaths[key].description,
                 score: score,
-                matchPercentage: Math.round((score - minScore) / (maxScore - minScore) * 100)
+                matchPercentage: Math.round((score / maxPossible) * 100)
             }))
             .sort((a, b) => b.score - a.score)
             .slice(0, 3); // 取前三名
