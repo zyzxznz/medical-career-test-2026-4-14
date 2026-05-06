@@ -188,15 +188,18 @@ function generateReportData(scores, userInfo, testResults) {
   let directionAnalysis;
   if (testRecommendations) {
     directionAnalysis = testRecommendations.map((rec, index) => {
-      // 重新计算匹配度（不依赖缓存值，兼容旧版localStorage数据）
-      const recalcPercentage = rec.score ? Math.round((rec.score / MAX_POSSIBLE_SCORE) * 100) : (rec.matchPercentage || 0);
+      // 优先使用保存的matchPercentage；有原始score时重新计算确保与app.js一致
+      let matchPct = rec.matchPercentage;
+      if (rec.score !== undefined && rec.score <= MAX_POSSIBLE_SCORE) {
+        matchPct = Math.round((rec.score / MAX_POSSIBLE_SCORE) * 100);
+      }
       // 在报告的推荐中查找匹配此方向的内容
       const matchedContent = findDirectionContent(report, rec.name);
       return {
         rank: index + 1,
         name: rec.name,
-        matchScore: recalcPercentage,
-        matchLevel: getMatchLevel(recalcPercentage),
+        matchScore: matchPct,
+        matchLevel: getMatchLevel(matchPct),
         strengths: matchedContent ? matchedContent.strengths : [],
         positions: matchedContent ? matchedContent.positions : []
       };

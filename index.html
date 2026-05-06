@@ -898,6 +898,9 @@
             const specialty = document.getElementById('specialty').value;
             const transitionGoals = careerPreference.transitionGoals || [];
             
+            // 构建推荐方向数据，供个性化报告页面使用
+            const branchRecommendations = getBranchRecommendations(matchScore);
+            
             // 保存到localStorage供个性化报告使用
             const testResults = {
                 scores: {
@@ -916,7 +919,9 @@
                     category: careerPreference.category
                 },
                 reportMatch: {
-                    matchScore: matchScore
+                    matchScore: matchScore,
+                    topRecommendation: branchRecommendations[0] || null,
+                    recommendations: branchRecommendations
                 }
             };
             
@@ -943,6 +948,53 @@
             showSection('result');
         }
         
+        // 根据分数和分支类型生成三条推荐方向数据（供localStorage和报告共用）
+        function getBranchRecommendations(score) {
+            const category = careerPreference.category;
+            const categoryMap = {
+                'medical-clinical': 'clinical-focused',
+                'medical-no-clinical': 'medical-no-clinical',
+                'uncertain': 'exploring',
+                'away': 'complete-transition'
+            };
+            const branchType = categoryMap[category] || 'default';
+            
+            const recMap = {
+                'clinical-focused': [
+                    { name: '临床管理', matchPercentage: score },
+                    { name: '临床专家', matchPercentage: Math.round(score * 0.9) },
+                    { name: '临床教学', matchPercentage: Math.round(score * 0.85) }
+                ],
+                'medical-no-clinical': [
+                    { name: '数字医疗', matchPercentage: 92 },
+                    { name: '医药产业', matchPercentage: 88 },
+                    { name: '公共卫生', matchPercentage: 85 }
+                ],
+                'exploring': [
+                    { name: '临床+副业', matchPercentage: 88 },
+                    { name: '技能拓展', matchPercentage: 82 },
+                    { name: '跨界探索', matchPercentage: 75 }
+                ],
+                'complete-transition': [
+                    { name: '数字医疗', matchPercentage: 92 },
+                    { name: '医药产业', matchPercentage: 88 },
+                    { name: '医学培训', matchPercentage: 85 }
+                ],
+                'default': [
+                    { name: '医疗管理', matchPercentage: score },
+                    { name: '医学教育', matchPercentage: Math.round(score * 0.85) },
+                    { name: '数字医疗', matchPercentage: Math.round(score * 0.75) }
+                ]
+            };
+            
+            return (recMap[branchType] || recMap['default']).map((rec, idx) => ({
+                path: ['管理', '教育', '科研', '产业', '公卫', '数字', '临床', '专家', '副业', '跨界'][idx] || 'unknown',
+                name: rec.name,
+                score: score * (1 - idx * 0.1),  // 近似原始得分
+                matchPercentage: rec.matchPercentage
+            }));
+        }
+        
         // 生成推荐内容
         function generateRecommendations(score) {
             const recommendationList = document.getElementById('recommendation-list');
@@ -959,7 +1011,12 @@
                 const storedResults = localStorage.getItem('careerTestResults');
                 if (storedResults) {
                     const results = JSON.parse(storedResults);
-                    branchType = results.careerPreference?.branchType || 'default';
+                    branchType = results.careerPreference?.category ? {
+                        'medical-clinical': 'clinical-focused',
+                        'medical-no-clinical': 'medical-no-clinical',
+                        'uncertain': 'exploring',
+                        'away': 'complete-transition'
+                    }[results.careerPreference.category] || 'default' : 'default';
                 }
             } catch (err) {
                 console.error('读取测试结果失败:', err);
