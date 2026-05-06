@@ -129,13 +129,42 @@ function getMatchLevel(score) {
   return '较低匹配';
 }
 
+// 测试页面方向名 → 报告数据标准方向名映射
+const DIRECTION_NAME_MAP = {
+  '临床管理': '医疗管理',
+  '临床教学': '医学教育',
+  '临床专家': '医学研究',
+  '医学培训': '医学教育',
+  '临床+副业': '数字医疗',
+  '技能拓展': '医药产业',
+  '跨界探索': '数字医疗',
+  '医疗管理': '医疗管理',
+  '医学教育': '医学教育',
+  '医学研究': '医学研究',
+  '医药产业': '医药产业',
+  '公共卫生': '公共卫生',
+  '数字医疗': '数字医疗',
+  '创业/自由职业': '创业/自由职业',
+  '自由职业/独立执业': '自由职业/独立执业'
+};
+
 // 辅助函数：在报告的推荐方向中查找匹配的内容
 function findDirectionContent(report, directionName) {
   if (!report) return null;
+  // 先尝试精确匹配
   const sections = ['primaryRecommendation', 'secondaryRecommendation', 'thirdRecommendation'];
   for (const key of sections) {
     if (report[key] && report[key].name === directionName) {
       return report[key];
+    }
+  }
+  // 尝试映射匹配（测试页方向名→报告数据标准名）
+  const mappedName = DIRECTION_NAME_MAP[directionName];
+  if (mappedName && mappedName !== directionName) {
+    for (const key of sections) {
+      if (report[key] && report[key].name === mappedName) {
+        return report[key];
+      }
     }
   }
   return null;
