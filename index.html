@@ -72,7 +72,7 @@
                             <p>清晰的职业发展路线图</p>
                         </div>
                     </div>
-                    <button id="start-test" class="btn-primary" onclick="showSection('info')">
+                    <button id="start-test" class="btn btn-primary btn-start" onclick="showSection('info')">
                         <i class="fas fa-play-circle"></i> 开始测试
                     </button>
                 </div>
@@ -249,7 +249,7 @@
                         <button id="next-question" class="btn-primary" disabled onclick="nextQuestion()">
                             下一题 <i class="fas fa-chevron-right"></i>
                         </button>
-                        <button id="submit-assessment" class="btn-success" style="display: none;" onclick="submitAssessment()">
+                        <button id="submit-assessment" class="btn-secondary" style="display: none;" onclick="submitAssessment()">
                             <i class="fas fa-paper-plane"></i> 提交评估
                         </button>
                     </div>
@@ -300,10 +300,10 @@
                     </div>
 
                     <div class="result-actions">
-                        <button id="restart-test" class="btn-primary" onclick="restartTest()">
+                        <button id="restart-test" class="btn-secondary" onclick="restartTest()">
                             <i class="fas fa-redo"></i> 重新测试
                         </button>
-                        <button id="view-personal-report" class="btn-primary" style="background: #2c5282;">
+                        <button id="view-personal-report" class="btn-secondary" >
                             <i class="fas fa-file-alt"></i> 查看个性化报告
                         </button>
                         <button id="download-report" class="btn-secondary" onclick="downloadReport()">
@@ -315,31 +315,33 @@
         </main>
 
         <!-- 项目介绍尾部 -->
-        <div class="project-intro-footer">
-            <div class="intro-container">
-                <div class="intro-content">
-                    <h3><i class="fas fa-users"></i> 加入我们的女性医护互助社群</h3>
-                    <p class="intro-description">
-                        无论你是医生、护士、药剂师还是其他医疗工作者，如果你在工作中感到压力、迷茫，或正在考虑职业转型，这里有一群理解你的女性同行。
-                    </p>
-                    <div class="footer-contact">
-                        <div class="contact-highlight">
-                            <i class="fas fa-comments"></i>
-                            <div>
-                                <h4>社群支持</h4>
-                                <p>经验分享 · 职业咨询 · 心理支持 · 资源互助</p>
-                            </div>
+        <div class="community-section">
+            <div class="community-container">
+                <h3 class="community-title"><i class="fas fa-users"></i> 加入我们的女性医护互助社群</h3>
+                <p class="community-desc">
+                    无论你是医生、护士、药剂师还是其他医疗工作者，如果你在工作中感到压力、迷茫，或正在考虑职业转型，这里有一群理解你的女性同行。
+                </p>
+                <div class="community-cards">
+                    <div class="community-card">
+                        <div class="community-card-icon" style="background: var(--primary-bg); color: var(--primary);">
+                            <i class="fas fa-hands-helping"></i>
                         </div>
-                        <div class="contact-highlight">
-                            <i class="fas fa-calendar-check"></i>
-                            <div>
-                                <h4>定期活动</h4>
-                                <p>线上分享会 · 职业规划工作坊 · 一对一咨询</p>
-                            </div>
-                        </div>
+                        <h4>社群支持</h4>
+                        <p>经验分享 · 职业咨询<br>心理支持 · 资源互助</p>
                     </div>
-                    <div class="final-call">
-                        <p><strong>微信ID：zyzxznz2021</strong> | 扫码加入，与更多女性医护同行一起成长</p>
+                    <div class="community-card">
+                        <div class="community-card-icon" style="background: var(--accent-bg); color: var(--accent);">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h4>定期活动</h4>
+                        <p>线上分享会 · 职业规划工作坊<br>一对一咨询</p>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-card-icon" style="background: #EDE8F3; color: #8B6BAE;">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <h4>扫码加入</h4>
+                        <p>微信ID：<strong>zyzxznz2021</strong><br>与更多女性医护同行一起成长</p>
                     </div>
                 </div>
             </div>
@@ -828,6 +830,7 @@
             
             if (currentQuestion < totalQuestions - 1) {
                 showQuestion(currentQuestion + 1);
+                document.getElementById('assessment-section').scrollIntoView({ behavior: 'smooth' });
             } else {
                 // 如果是最后一题，提交评估
                 submitAssessment();
@@ -990,12 +993,11 @@
             return (recMap[branchType] || recMap['default']).map((rec, idx) => ({
                 path: ['管理', '教育', '科研', '产业', '公卫', '数字', '临床', '专家', '副业', '跨界'][idx] || 'unknown',
                 name: rec.name,
-                score: score * (1 - idx * 0.1),  // 近似原始得分
                 matchPercentage: rec.matchPercentage
             }));
         }
         
-        // 生成推荐内容
+        // 生成推荐内容（与个性化报告的 matchPercentage 保持完全一致）
         function generateRecommendations(score) {
             const recommendationList = document.getElementById('recommendation-list');
             const actionPlanContent = document.getElementById('action-plan-content');
@@ -1005,12 +1007,14 @@
             let recommendationsHtml = '';
             let actionPlanHtml = '';
             
-            // 从localStorage获取分支类型
+            // 统一从 localStorage 读取已计算的推荐数据（与个性化报告使用同一数据源）
+            let storedRecommendations = null;
             let branchType = 'default';
             try {
                 const storedResults = localStorage.getItem('careerTestResults');
                 if (storedResults) {
                     const results = JSON.parse(storedResults);
+                    storedRecommendations = results.reportMatch?.recommendations || null;
                     branchType = results.careerPreference?.category ? {
                         'medical-clinical': 'clinical-focused',
                         'medical-no-clinical': 'medical-no-clinical',
@@ -1022,175 +1026,106 @@
                 console.error('读取测试结果失败:', err);
             }
             
-            if (branchType === 'clinical-focused') {
-                // 留在医疗，留在临床：明确想转型到其他临床相关职业
-                recommendationsHtml = `
-                    <div class="recommendation-item">
-                        <h4>1. 临床管理 (匹配度: ${score}%)</h4>
-                        <p>科室管理、临床带教、医疗质量控制。您可以转型为临床管理者。</p>
-                    </div>
-                    <div class="recommendation-item">
-                        <h4>2. 临床专家 (匹配度: ${Math.round(score * 0.9)}%)</h4>
-                        <p>专科发展、亚专科建设。您可以在临床岗位上成为专家型人才。</p>
-                    </div>
-                    <div class="recommendation-item">
-                        <h4>3. 临床教学 (匹配度: ${Math.round(score * 0.85)}%)</h4>
-                        <p>住培带教、临床技能培训。将您的临床经验传授给年轻医生。</p>
-                    </div>
-                `;
-                
-                actionPlanHtml = `
-                    <div class="action-item">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <h4>管理能力</h4>
-                            <p>建议提升领导力和沟通能力，向临床管理方向发展。</p>
-                        </div>
-                    </div>
-                    <div class="action-item">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <h4>专业深化</h4>
-                            <p>可以选择一个亚专科方向，深入发展成为临床专家。</p>
-                        </div>
-                    </div>
-                `;
-            } else if (branchType === 'medical-no-clinical') {
-                // 留在医疗但远离临床：医学相关可以但不想干临床了
-                recommendationsHtml = `
-                    <div class="recommendation-item">
-                        <h4>1. 数字医疗 (匹配度: 92%)</h4>
-                        <p>医疗信息化、健康科技、远程医疗。脱离临床一线，但仍在医疗行业发挥价值。</p>
-                    </div>
-                    <div class="recommendation-item">
-                        <h4>2. 医药产业 (匹配度: 88%)</h4>
-                        <p>医药企业、医疗器械、医学服务。发挥医学背景优势，脱离临床环境。</p>
-                    </div>
-                    <div class="recommendation-item">
-                        <h4>3. 公共卫生 (匹配度: 85%)</h4>
-                        <p>疾控、卫生管理、健康教育。从个体诊疗转向群体健康服务。</p>
-                    </div>
-                `;
-                
-                actionPlanHtml = `
-                    <div class="action-item">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <h4>技能转型</h4>
-                            <p>建议学习医疗信息化、项目管理等非临床技能，开始向幕后岗位转型。</p>
-                        </div>
-                    </div>
-                    <div class="action-item">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <h4>行业探索</h4>
-                            <p>可以通过实习、兼职或行业交流活动，了解非临床工作环境。</p>
-                        </div>
-                    </div>
-                `;
-            } else if (branchType === 'exploring') {
-                // 不确定：纠结中或想了解可能性
-                recommendationsHtml = `
-                    <div class="recommendation-item">
-                        <h4>1. 临床+副业 (匹配度: 88%)</h4>
-                        <p>在临床工作基础上，探索医学科普、医学教育等副业可能性。</p>
-                    </div>
-                    <div class="recommendation-item">
-                        <h4>2. 技能拓展 (匹配度: 82%)</h4>
-                        <p>学习新技能，如医学研究、教学能力，为未来发展做准备。</p>
-                    </div>
-                    <div class="recommendation-item">
-                        <h4>3. 跨界探索 (匹配度: 75%)</h4>
-                        <p>了解医疗信息化、AI医疗等新领域，寻找适合自己的方向。</p>
-                    </div>
-                `;
-                
-                actionPlanHtml = `
-                    <div class="action-item">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <h4>拓宽视野</h4>
-                            <p>建议参加行业论坛、研讨会，了解医疗行业的多元发展路径。</p>
-                        </div>
-                    </div>
-                    <div class="action-item">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <h4>尝试探索</h4>
-                            <p>可以尝试参与一些非临床项目，找到自己的兴趣点。</p>
-                        </div>
-                    </div>
-                `;
-            } else if (branchType === 'complete-transition') {
-                // 远离医疗远离临床（正常不会到这里，因为前端已拦截）
-                recommendationsHtml = `
-                    <div class="recommendation-item">
-                        <h4>1. 数字医疗 (匹配度: 92%)</h4>
-                        <p>医疗信息化、健康科技、远程医疗。您完全离开了临床，但仍在医疗行业。</p>
-                    </div>
-                    <div class="recommendation-item">
-                        <h4>2. 医药产业 (匹配度: 88%)</h4>
-                        <p>医药企业、医疗器械、医学服务。您可以发挥医学背景优势，但脱离临床环境。</p>
-                    </div>
-                    <div class="recommendation-item">
-                        <h4>3. 医学培训 (匹配度: 85%)</h4>
-                        <p>医学教育、企业培训、技能培训。将您的专业经验传授给他人。</p>
-                    </div>
-                `;
-                
-                actionPlanHtml = `
-                    <div class="action-item">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <h4>技能转型</h4>
-                            <p>建议学习医疗信息化、项目管理等非临床技能，开始向幕后岗位转型。</p>
-                        </div>
-                    </div>
-                    <div class="action-item">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <h4>行业探索</h4>
-                            <p>可以通过实习、兼职或行业交流活动，了解非临床工作环境。</p>
-                        </div>
-                    </div>
-                `;
+            // 根据分支类型定义行动建议内容
+            const actionPlanMap = {
+                'clinical-focused': [
+                    { title: '管理能力', desc: '建议提升领导力和沟通能力，向临床管理方向发展。' },
+                    { title: '专业深化', desc: '可以选择一个亚专科方向，深入发展成为临床专家。' }
+                ],
+                'medical-no-clinical': [
+                    { title: '技能转型', desc: '建议学习医疗信息化、项目管理等非临床技能，开始向幕后岗位转型。' },
+                    { title: '行业探索', desc: '可以通过实习、兼职或行业交流活动，了解非临床工作环境。' }
+                ],
+                'exploring': [
+                    { title: '拓宽视野', desc: '建议参加行业论坛、研讨会，了解医疗行业的多元发展路径。' },
+                    { title: '尝试探索', desc: '可以尝试参与一些非临床项目，找到自己的兴趣点。' }
+                ],
+                'complete-transition': [
+                    { title: '技能转型', desc: '建议学习医疗信息化、项目管理等非临床技能，开始向幕后岗位转型。' },
+                    { title: '行业探索', desc: '可以通过实习、兼职或行业交流活动，了解非临床工作环境。' }
+                ],
+                'default': [
+                    { title: '技能提升', desc: '针对医疗管理方向，建议重点提升领导力、沟通能力、抗压能力等核心能力。' },
+                    { title: '学习资源', desc: '推荐参加医院管理培训课程、医疗质量改进研讨会，阅读管理类书籍。' }
+                ]
+            };
+            
+            if (storedRecommendations && storedRecommendations.length > 0) {
+                // 优先使用 localStorage 中已存储的推荐数据（与个性化报告完全一致）
+                recommendationsHtml = storedRecommendations.map((rec, idx) => {
+                    const pct = rec.matchPercentage !== undefined ? rec.matchPercentage : Math.round(score * (1 - idx * 0.1));
+                    return `<div class="recommendation-item">
+                        <h4>${idx + 1}. ${rec.name} (匹配度: ${pct}%)</h4>
+                        <p>${getRecommendationDescription(rec.name)}</p>
+                    </div>`;
+                }).join('');
             } else {
-                // 默认推荐（原有逻辑）
-                recommendationsHtml = `
-                    <div class="recommendation-item">
-                        <h4>1. 医疗管理 (匹配度: ${score}%)</h4>
-                        <p>医院管理、科室主任、医疗质量管控等。您的领导力和管理能力突出，适合向管理方向发展。</p>
-                    </div>
-                    <div class="recommendation-item">
-                        <h4>2. 医学教育 (匹配度: ${Math.round(score * 0.85)}%)</h4>
-                        <p>医学院教师、临床培训师、医学教育管理。您有较强的教学和沟通能力。</p>
-                    </div>
-                    <div class="recommendation-item">
-                        <h4>3. 数字医疗 (匹配度: ${Math.round(score * 0.75)}%)</h4>
-                        <p>医疗信息化、健康科技、远程医疗。您对新技术有较强兴趣。</p>
-                    </div>
-                `;
-                
-                actionPlanHtml = `
-                    <div class="action-item">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <h4>技能提升</h4>
-                            <p>针对医疗管理方向，建议重点提升领导力、沟通能力、抗压能力等核心能力。</p>
-                        </div>
-                    </div>
-                    <div class="action-item">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <h4>学习资源</h4>
-                            <p>推荐参加医院管理培训课程、医疗质量改进研讨会，阅读管理类书籍。</p>
-                        </div>
-                    </div>
-                `;
+                // Fallback：使用分支类型对应的默认推荐（fallback 逻辑）
+                const defaultRecs = {
+                    'clinical-focused': [
+                        { name: '临床管理', basePct: score },
+                        { name: '临床专家', basePct: Math.round(score * 0.9) },
+                        { name: '临床教学', basePct: Math.round(score * 0.85) }
+                    ],
+                    'medical-no-clinical': [
+                        { name: '数字医疗', basePct: 92 },
+                        { name: '医药产业', basePct: 88 },
+                        { name: '公共卫生', basePct: 85 }
+                    ],
+                    'exploring': [
+                        { name: '临床+副业', basePct: 88 },
+                        { name: '技能拓展', basePct: 82 },
+                        { name: '跨界探索', basePct: 75 }
+                    ],
+                    'complete-transition': [
+                        { name: '数字医疗', basePct: 92 },
+                        { name: '医药产业', basePct: 88 },
+                        { name: '医学培训', basePct: 85 }
+                    ]
+                };
+                const recs = defaultRecs[branchType] || defaultRecs['default'];
+                recommendationsHtml = recs.map((rec, idx) => {
+                    return `<div class="recommendation-item">
+                        <h4>${idx + 1}. ${rec.name} (匹配度: ${rec.basePct}%)</h4>
+                        <p>${getRecommendationDescription(rec.name)}</p>
+                    </div>`;
+                }).join('');
             }
+            
+            // 生成行动计划
+            const actions = actionPlanMap[branchType] || actionPlanMap['default'];
+            actionPlanHtml = actions.map(a => `
+                <div class="action-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <h4>${a.title}</h4>
+                        <p>${a.desc}</p>
+                    </div>
+                </div>
+            `).join('');
             
             recommendationList.innerHTML = recommendationsHtml;
             actionPlanContent.innerHTML = actionPlanHtml;
+        }
+        
+        // 根据转型方向名称返回对应描述（与个性化报告中的推荐描述保持一致）
+        function getRecommendationDescription(name) {
+            const descMap = {
+                '临床管理': '科室管理、临床带教、医疗质量控制。您可以转型为临床管理者。',
+                '临床专家': '专科发展、亚专科建设。您可以在临床岗位上成为专家型人才。',
+                '临床教学': '住培带教、临床技能培训。将您的临床经验传授给年轻医生。',
+                '数字医疗': '医疗信息化、健康科技、远程医疗。脱离临床一线，但仍在医疗行业发挥价值。',
+                '医药产业': '医药企业、医疗器械、医学服务。发挥医学背景优势，脱离临床环境。',
+                '公共卫生': '疾控、卫生管理、健康教育。从个体诊疗转向群体健康服务。',
+                '医学研究': '医学研究、数据分析、临床试验。将您的临床经验转化为科研成果。',
+                '医学教育': '医学院教师、临床培训师、医学教育管理。您有较强的教学和沟通能力。',
+                '医疗管理': '医院管理、科室主任、医疗质量管控等。您的领导力和管理能力突出，适合向管理方向发展。',
+                '临床+副业': '在临床工作基础上，探索医学科普、医学教育等副业可能性。',
+                '技能拓展': '学习新技能，如医学研究、教学能力，为未来发展做准备。',
+                '跨界探索': '了解医疗信息化、AI医疗等新领域，寻找适合自己的方向。',
+                '医学培训': '医学教育、企业培训、技能培训。将您的专业经验传授给他人。'
+            };
+            return descMap[name] || '根据您的测试结果推荐的方向。';
         }
         
         // 重新测试
