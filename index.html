@@ -891,9 +891,6 @@
             // 更新结果页面
             document.getElementById('match-score').textContent = `${matchScore}%`;
             
-            // 生成推荐内容
-            generateRecommendations(matchScore);
-            
             // 收集用户信息
             const currentRole = document.getElementById('current-role').value;
             const experience = document.getElementById('experience').value;
@@ -946,6 +943,9 @@
             } catch (err) {
                 console.error('保存测试结果到 localStorage 失败:', err);
             }
+            
+            // 从localStorage中读取并生成推荐内容（此时数据已保存，避免第一次运行时空数据读取）
+            generateRecommendations(matchScore);
             
             // 显示结果页面
             showSection('result');
@@ -1081,6 +1081,11 @@
                         { name: '数字医疗', basePct: 92 },
                         { name: '医药产业', basePct: 88 },
                         { name: '医学培训', basePct: 85 }
+                    ],
+                    'default': [
+                        { name: '医疗管理', basePct: score },
+                        { name: '医学教育', basePct: Math.round(score * 0.85) },
+                        { name: '数字医疗', basePct: Math.round(score * 0.75) }
                     ]
                 };
                 const recs = defaultRecs[branchType] || defaultRecs['default'];
