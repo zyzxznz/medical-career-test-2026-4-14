@@ -4,858 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>个性化转型分析报告 - 医护职业转型测试系统</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=202608112140">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        /* 个性化报告专用样式 - 淡黄深绿主题 */
-        :root {
-            /* 主色系 - 深绿 + 淡黄 */
-            --report-primary: #1a4a3a;
-            --report-primary-dark: #0d3325;
-            --report-primary-light: #2a6352;
-            --report-accent: #3d7a5c;
-            
-            /* 淡黄/米黄层次 */
-            --report-cream: #fdf8e8;
-            --report-cream-light: #fefcf5;
-            --report-cream-dark: #f5eeda;
-            
-            /* 背景层次 */
-            --report-bg-base: #f5f1e6;
-            --report-bg-card: #ffffff;
-            --report-bg-muted: #f8f6f0;
-            
-            /* 功能色 - 绿色系 */
-            --report-success: #2d6a4f;
-            --report-success-light: #e8f5ed;
-            --report-warning: #b8860b;
-            --report-warning-light: #fef7e0;
-            --report-danger: #a63d3d;
-            --report-danger-light: #fdeaea;
-            
-            /* 边框与分隔 */
-            --report-border: #d4d0c8;
-            --report-border-light: #e8e5dd;
-            
-            /* 文字层次 */
-            --text-primary: #1a1a1a;
-            --text-secondary: #4a4a4a;
-            --text-muted: #6b6b6b;
-            
-            /* 辅助色 */
-            --report-gold: #b8860b;
-            --report-gold-light: #d4a84b;
-        }
-
-        body {
-            background: linear-gradient(165deg, var(--report-cream-light) 0%, var(--report-bg-base) 50%, var(--report-cream) 100%);
-            min-height: 100vh;
-            color: var(--text-primary);
-        }
-
-        .report-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* 报告头部 */
-        .report-header {
-            background: linear-gradient(160deg, var(--report-primary-dark) 0%, var(--report-primary) 50%, var(--report-primary-light) 100%);
-            color: white;
-            padding: 2.5rem 2rem;
-            border-radius: 16px 16px 0 0;
-            text-align: center;
-            box-shadow: 0 8px 32px rgba(13, 51, 37, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .report-header::before {
-            content: '';
-            position: absolute;
-            top: -30%;
-            left: -30%;
-            width: 160%;
-            height: 160%;
-            background: 
-                radial-gradient(ellipse at 20% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 85% 65%, rgba(200, 200, 150, 0.1) 0%, transparent 40%);
-            pointer-events: none;
-        }
-
-        .report-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 3px 10px rgba(0,0,0,0.2));
-            color: #c8e6c9;
-        }
-
-        .report-header h1 {
-            margin: 0 0 0.5rem 0;
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        }
-
-        .report-subtitle {
-            opacity: 0.9;
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-
-        .report-meta {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 0.5rem 1.2rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-        }
-
-        .meta-item i {
-            color: #a5d6a7;
-        }
-
-        /* 报告导航 */
-        .report-navigation {
-            display: flex;
-            background: white;
-            border-radius: 0 0 12px 12px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(44, 82, 130, 0.08);
-            overflow: hidden;
-        }
-
-        .nav-btn {
-            flex: 1;
-            min-width: 100px;
-            padding: 1rem 0.8rem;
-            border: none;
-            background: none;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.4rem;
-            color: #4a5568;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-            border-bottom: 3px solid transparent;
-        }
-
-        .nav-btn:hover {
-            background: var(--report-cream-dark);
-            color: var(--report-primary);
-        }
-
-        .nav-btn.active {
-            color: var(--report-primary);
-            border-bottom-color: var(--report-success);
-            background: var(--report-cream-dark);
-            font-weight: 600;
-        }
-
-        .nav-btn i {
-            font-size: 1.2rem;
-        }
-
-        /* 报告部分 */
-        .report-section {
-            display: none;
-            background: var(--report-bg-card);
-            padding: 2rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            animation: fadeIn 0.5s ease;
-        }
-
-        .report-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .report-section h3 {
-            color: var(--report-primary);
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 2px solid var(--report-border-light);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.4rem;
-            font-weight: 600;
-        }
-
-        .report-section h3 i {
-            color: var(--report-success);
-        }
-
-        .report-section h4 {
-            color: var(--report-primary);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        /* 执行摘要 */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .summary-card {
-            background: var(--report-cream);
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid var(--report-border-light);
-            text-align: center;
-        }
-
-        .summary-card h4 {
-            text-align: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-
-        .readiness-circle {
-            width: 130px;
-            height: 130px;
-            margin: 0 auto 1rem;
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            background: conic-gradient(#3182ce 0%, #bee3f8 0%);
-        }
-
-        .readiness-circle::before {
-            content: '';
-            position: absolute;
-            width: 110px;
-            height: 110px;
-            background: white;
-            border-radius: 50%;
-        }
-
-        .readiness-circle .score-value {
-            position: relative;
-            z-index: 1;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--report-primary);
-        }
-
-        .readiness-circle .score-label {
-            position: relative;
-            z-index: 1;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        .summary-card .score-description {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-        }
-
-        .primary-direction {
-            padding: 0.5rem;
-        }
-
-        .primary-direction h5 {
-            font-size: 1.6rem;
-            color: var(--report-primary);
-            margin: 0.3rem 0;
-        }
-
-        .match-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--report-primary) 0%, var(--report-accent) 100%);
-            color: white;
-            padding: 0.3rem 1.2rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin: 0.5rem 0;
-        }
-
-        .core-traits-list {
-            text-align: left;
-            padding-left: 0;
-            list-style: none;
-        }
-
-        .core-traits-list li {
-            padding: 0.4rem 0;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
-
-        .core-traits-list li::before {
-            content: '◆';
-            color: var(--report-success);
-            font-size: 0.8rem;
-            flex-shrink: 0;
-        }
-
-        /* 用户画像 */
-        .profile-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .profile-card {
-            padding: 1.5rem;
-            border-radius: 12px;
-        }
-
-        .profile-card h4 {
-            margin-bottom: 1rem;
-        }
-
-        .profile-card ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .profile-card ul li {
-            padding: 0.5rem 0;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.6rem;
-            color: var(--text-secondary);
-        }
-
-        .profile-description {
-            grid-column: 1 / -1;
-            background: var(--report-cream);
-            padding: 1.5rem;
-            border-radius: 12px;
-            border-left: 4px solid var(--report-primary);
-            font-size: 0.95rem;
-            line-height: 1.7;
-            color: var(--text-secondary);
-        }
-
-        .profile-strengths {
-            background: var(--report-success-light);
-            border: 1px solid rgba(61, 122, 92, 0.2);
-        }
-
-        .profile-strengths h4 i { color: var(--report-success); }
-        .profile-strengths ul li::before { content: '✓'; color: var(--report-success); font-weight: bold; margin-right: 0.3rem; }
-
-        .profile-areas {
-            background: var(--report-warning-light);
-            border: 1px solid rgba(176, 125, 45, 0.2);
-        }
-
-        .profile-areas h4 i { color: var(--report-warning); }
-        .profile-areas ul li::before { content: '●'; color: var(--report-warning); font-weight: bold; margin-right: 0.3rem; }
-
-        .profile-core {
-            background: var(--report-cream);
-            border: 1px solid var(--report-border-light);
-        }
-
-        .profile-core h4 i { color: var(--report-success); }
-        .profile-core ul li::before { content: '◆'; color: var(--report-accent); margin-right: 0.3rem; }
-
-        /* 方向分析 */
-        .direction-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            overflow-x: auto;
-        }
-
-        .direction-tab {
-            padding: 0.7rem 1.5rem;
-            border: 2px solid var(--report-border);
-            background: var(--report-bg-card);
-            border-radius: 30px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .direction-tab:hover {
-            border-color: var(--report-primary);
-            color: var(--report-primary);
-            background: var(--report-bg-muted);
-        }
-
-        .direction-tab.active {
-            background: linear-gradient(135deg, var(--report-primary) 0%, var(--report-accent) 100%);
-            color: white;
-            border-color: var(--report-primary);
-        }
-
-        .direction-content {
-            background: var(--report-cream);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid var(--report-border-light);
-        }
-
-        .direction-detail {
-            display: none;
-        }
-
-        .direction-detail.active {
-            display: block;
-        }
-
-        .analysis-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-        }
-
-        .analysis-card {
-            background: var(--report-bg-card);
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--report-border-light);
-        }
-
-        .analysis-card h5 {
-            color: var(--report-primary);
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .analysis-card ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .analysis-card ul li {
-            padding: 0.4rem 0;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
-
-        .analysis-card ul li::before {
-            content: '•';
-            color: var(--report-accent);
-            font-weight: bold;
-        }
-
-        .direction-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .direction-header h4 {
-            margin: 0;
-        }
-
-        .direction-score-badge {
-            background: linear-gradient(135deg, var(--report-primary) 0%, var(--report-accent) 100%);
-            color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .positions-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .position-tag {
-            background: var(--report-cream);
-            color: var(--report-primary);
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            border: 1px solid var(--report-border-light);
-        }
-
-        .position-tag:hover {
-            background: linear-gradient(135deg, var(--report-primary) 0%, var(--report-accent) 100%);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(26, 74, 58, 0.25);
-            border-color: transparent;
-        }
-
-        .position-tag::after {
-            content: '点击查看详情';
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2c5282;
-            color: white;
-            padding: 0.3rem 0.6rem;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            z-index: 10;
-        }
-
-        .position-tag:hover::after {
-            opacity: 1;
-        }
-
-        /* 岗位详情弹窗 */
-        .position-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .position-modal-overlay.active {
-            display: flex;
-        }
-
-        .position-modal {
-            background: white;
-            border-radius: 16px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: modalSlideIn 0.3s ease;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .position-modal-header {
-            background: linear-gradient(135deg, var(--report-primary) 0%, var(--report-accent) 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 16px 16px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .position-modal-header h3 {
-            margin: 0;
-            font-size: 1.2rem;
-        }
-
-        .position-modal-close {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: background 0.2s;
-        }
-
-        .position-modal-close:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        .position-modal-body {
-            padding: 1.5rem;
-        }
-
-        .position-section {
-            margin-bottom: 1.5rem;
-        }
-
-        .position-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .position-section h4 {
-            color: var(--report-primary);
-            font-size: 0.95rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .position-section h4 i {
-            color: var(--report-success);
-        }
-
-        .position-section p, .position-section ul {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.7;
-            margin: 0;
-        }
-
-        .position-section ul {
-            padding-left: 1.2rem;
-        }
-
-        .position-section ul li {
-            margin-bottom: 0.3rem;
-        }
-
-        .position-tag-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .position-tag-item {
-            background: var(--report-cream);
-            color: var(--report-primary);
-            padding: 0.3rem 0.8rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            border: 1px solid var(--report-border-light);
-        }
-
-        .position-search-btn {
-            display: block;
-            width: 100%;
-            padding: 0.8rem;
-            background: linear-gradient(135deg, var(--report-primary) 0%, var(--report-accent) 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            cursor: pointer;
-            text-align: center;
-            margin-top: 1rem;
-            transition: all 0.25s ease;
-        }
-
-        .position-search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(26, 54, 93, 0.3);
-        }
-
-        .position-search-btn i {
-            margin-right: 0.5rem;
-        }
-
-        .position-source-note {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            padding: 0.8rem;
-            border-top: 1px solid var(--report-border-light);
-            margin-top: 1rem;
-        }
-
-        /* 搜索跳转提示（开发中） */
-        .search-pending-notice {
-            background: var(--report-warning-light);
-            border: 1px solid rgba(176, 125, 45, 0.3);
-            border-radius: 8px;
-            padding: 0.8rem;
-            margin-top: 1rem;
-            text-align: center;
-            color: var(--report-warning);
-            font-size: 0.85rem;
-        }
-
-        /* 报告操作按钮 */
-        .report-actions {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--report-border-light);
-        }
-
-        .loading-message {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-muted);
-        }
-
-        .loading-message i {
-            font-size: 3rem;
-            color: var(--report-accent);
-            margin-bottom: 1rem;
-        }
-
-        .no-data-message {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text-muted);
-        }
-
-        .no-data-message i {
-            font-size: 4rem;
-            color: var(--report-border);
-            margin-bottom: 1.5rem;
-        }
-
-        /* 响应式 */
-        @media (max-width: 768px) {
-            .summary-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .profile-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .analysis-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .report-navigation {
-                flex-wrap: wrap;
-            }
-            
-            .nav-btn {
-                min-width: 80px;
-                padding: 0.8rem 0.5rem;
-                font-size: 0.8rem;
-            }
-            
-            .report-meta {
-                flex-direction: column;
-                align-items: center;
-                gap: 0.8rem;
-            }
-            
-            .report-header h1 {
-                font-size: 1.5rem;
-            }
-            
-            .report-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .direction-tabs {
-                justify-content: center;
-            }
-        }
-
-        /* 按钮样式增强 - 专业深蓝金色系 */
-        .btn-primary,
-        .btn-secondary {
-            padding: 14px 32px !important;
-            font-size: 1rem !important;
-            font-weight: 600 !important;
-            border-radius: 10px !important;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--report-primary) 0%, var(--report-accent) 100%) !important;
-            color: #fff !important;
-            border: none !important;
-            box-shadow: 0 4px 14px rgba(26, 54, 93, 0.3) !important;
-            transition: all 0.25s ease !important;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 6px 20px rgba(26, 54, 93, 0.4) !important;
-        }
-
-        .btn-secondary {
-            background: transparent !important;
-            color: var(--report-primary) !important;
-            border: 2px solid var(--report-primary) !important;
-            box-shadow: none !important;
-            transition: all 0.25s ease !important;
-        }
-
-        .btn-secondary:hover {
-            background: var(--report-primary) !important;
-            color: #fff !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 4px 14px rgba(26, 54, 93, 0.25) !important;
-        }
-
-        @media print {
-            .report-navigation, .report-actions {
-                display: none;
-            }
-            
-            .report-section {
-                display: block !important;
-                page-break-inside: avoid;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/report.css">
 </head>
 <body>
     <div class="report-container">
@@ -899,6 +51,18 @@
             <button class="nav-btn" data-section="direction-analysis">
                 <i class="fas fa-compass"></i>
                 <span>方向分析</span>
+            </button>
+            <button class="nav-btn" data-section="skill-gap">
+                <i class="fas fa-tools"></i>
+                <span>技能差距</span>
+            </button>
+            <button class="nav-btn" data-section="action-plan">
+                <i class="fas fa-road"></i>
+                <span>行动计划</span>
+            </button>
+            <button class="nav-btn" data-section="resources">
+                <i class="fas fa-book"></i>
+                <span>资源推荐</span>
             </button>
         </div>
         
@@ -1004,6 +168,41 @@
                     <!-- 由JS动态生成 -->
                 </div>
             </section>
+
+            <!-- 技能差距分析 -->
+            <section id="skill-gap" class="report-section">
+                <h3><i class="fas fa-tools"></i> 技能差距分析</h3>
+                <div class="skill-gap-grid">
+                    <div class="skill-gap-card">
+                        <h4><i class="fas fa-chart-bar" style="color:var(--report-success)"></i> 能力得分详情</h4>
+                        <div id="skill-gap-bars">
+                            <!-- 由JS动态生成 -->
+                        </div>
+                    </div>
+                    <div class="skill-gap-card">
+                        <h4><i class="fas fa-exclamation-circle" style="color:var(--report-warning)"></i> 优先提升项</h4>
+                        <ul class="skill-priority-list" id="skill-priority-list">
+                            <!-- 由JS动态生成 -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 行动计划 -->
+            <section id="action-plan" class="report-section">
+                <h3><i class="fas fa-road"></i> 转型行动计划</h3>
+                <div class="action-timeline" id="action-timeline">
+                    <!-- 由JS动态生成 -->
+                </div>
+            </section>
+
+            <!-- 资源推荐 -->
+            <section id="resources" class="report-section">
+                <h3><i class="fas fa-book"></i> 转型资源推荐</h3>
+                <div class="resource-grid" id="resource-grid">
+                    <!-- 由JS动态生成 -->
+                </div>
+            </section>
         </div>
         
         <!-- 报告操作 -->
@@ -1018,7 +217,7 @@
     </div>
     
     <script src="js/personalized-report-data.js"></script>
-    <script src="js/personalized-report.js"></script>
+    <script src="js/personalized-report_v2.js"></script>
     <script>
         // 用户信息映射
         const roleNameMap = {
@@ -1028,6 +227,17 @@
             'technician': '医技人员',
             'administrator': '医疗管理人员',
             'other': '其他'
+        };
+
+        const specialtyNameMap = {
+            'internal': '内科',
+            'surgical': '外科',
+            'obgyn': '妇产科',
+            'pediatric': '儿科',
+            'emergency': '急诊',
+            'anesthesia': '麻醉',
+            'gp': '全科',
+            'other-specialty': '其他'
         };
 
         const experienceNameMap = {
@@ -1084,19 +294,20 @@
             document.getElementById('loading-section').classList.remove('active');
             
             // 显示用户信息
+            // 获取个人信息（index_v2.html 保存的字段是 A1/A1-1/A2/A3）
             const userInfo = testResults.userInfo || {};
-            const roleKey = userInfo.currentRole || '';
-            const expKey = userInfo.experience || '';
-            const eduKey = userInfo.education || '';
+            const roleKey = userInfo.A1 || '';
+            const specialtyKey = userInfo['A1-1'] || '';
+            const expKey = userInfo.A2 || '';
+            const eduKey = userInfo.A3 || '';
             
             document.getElementById('user-role-display').textContent = roleNameMap[roleKey] || roleKey || '--';
+            document.getElementById('user-specialty-display').textContent = specialtyNameMap[specialtyKey] || specialtyKey || '';
             document.getElementById('user-experience-display').textContent = experienceNameMap[expKey] || expKey || '--';
             document.getElementById('user-education-display').textContent = educationNameMap[eduKey] || eduKey || '--';
-            document.getElementById('user-specialty-display').textContent = userInfo.specialty || '--';
             
-            // 获取能力得分
-            const scores = testResults.scores || {};
-            const abilityScores = scores.abilityScores || {};
+            // 获取能力得分（index_v2.html 保存时直接放在顶层，不是嵌套在 scores 下）
+            const abilityScores = testResults.abilityScores || {};
             
             // 生成报告数据（传入完整测试结果，确保与测试结果显示一致）
             const reportData = generateReportData(abilityScores, userInfo, testResults);
@@ -1114,6 +325,9 @@
             const exe = reportData.executiveSummary;
             const profile = reportData.userProfile;
             const directions = reportData.directionAnalysis;
+            const skillGap = reportData.skillGap;
+            const actionPlan = reportData.actionPlan;
+            const resources = reportData.resources;
             
             // ---- 执行摘要 ----
             // 准备度分数圆圈
@@ -1174,6 +388,123 @@
             
             // ---- 方向分析 ----
             renderDirectionAnalysis(directions);
+
+            // ---- 技能差距 ----
+            renderSkillGap(skillGap);
+
+            // ---- 行动计划 ----
+            renderActionPlan(actionPlan);
+
+            // ---- 资源推荐 ----
+            renderResources(resources);
+        }
+
+        // ================================================
+        // 技能差距分析渲染
+        // ================================================
+        function renderSkillGap(skillGap) {
+            if (!skillGap || !skillGap.gapItems) return;
+            const barsEl = document.getElementById('skill-gap-bars');
+            const listEl = document.getElementById('skill-priority-list');
+            if (!barsEl || !listEl) return;
+
+            const sortedItems = [...skillGap.gapItems];
+            barsEl.innerHTML = sortedItems.map(item => {
+                const userPct = (item.userScore / 5 * 100).toFixed(0);
+                const gapText = item.gap > 0 ? `+${item.gap}` : `${item.gap}`;
+                const tagClass = item.gapLabel === 'surplus' ? 'gap-surplus' : item.gapLabel === 'small' ? 'gap-small' : item.gapLabel === 'medium' ? 'gap-medium' : 'gap-large';
+                return `<div class="skill-item">
+                    <div class="skill-item-header">
+                        <span class="skill-item-name">${item.name}</span>
+                        <span>
+                            <span class="skill-item-score">${item.userScore}</span>
+                            <span style="font-size:0.72rem;padding:0.1rem 0.4rem;border-radius:8px;margin-left:0.3rem;color:white;" class="gap-tag ${tagClass}">${gapText > 0 ? '+' + gapText : gapText}</span>
+                        </span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar-user" style="width:${userPct}%"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:2px;">
+                        <span>典型值: ${item.typicalScore}</span>
+                        <span style="color:var(--report-success);">▲ 典型值线</span>
+                    </div>
+                </div>`;
+            }).join('');
+
+            listEl.innerHTML = skillGap.priorities.length > 0
+                ? skillGap.priorities.map((p, i) => `
+                    <li>
+                        <span style="color:var(--text-primary);">${p.name}</span>
+                        <span style="color:var(--text-muted);font-size:0.8rem;margin-left:0.5rem;">${p.userScore} → ${p.targetScore}</span>
+                        <span style="background:var(--report-primary);color:white;font-size:0.7rem;padding:0.1rem 0.4rem;border-radius:8px;margin-left:auto;">优先提升</span>
+                    </li>`).join('')
+                : '<li style="color:var(--report-success);font-weight:600;">你的能力分布均衡，继续保持！</li>';
+        }
+
+        // ================================================
+        // 行动计划渲染
+        // ================================================
+        function renderActionPlan(actionPlan) {
+            if (!actionPlan) return;
+            const timelineEl = document.getElementById('action-timeline');
+            if (!timelineEl) return;
+
+            const phases = [
+                { icon: 'fa-search', color: '#3182ce', phase: actionPlan.phase1 },
+                { icon: 'fa-cogs',   color: '#e89e31', phase: actionPlan.phase2 },
+                { icon: 'fa-rocket', color: '#38a169', phase: actionPlan.phase3 },
+            ];
+
+            timelineEl.innerHTML = phases.map((p, idx) => `
+                <div class="timeline-phase" id="tp-${idx}" style="--phase-color:${p.color}">
+                    <div class="timeline-phase-header" style="background:${p.color}">
+                        <span><i class="fas ${p.icon}" style="margin-right:0.5rem;"></i>${p.phase.title}</span>
+                    </div>
+                    <div class="timeline-phase-body">
+                        ${p.phase.milestones.map((m) => `
+                            <div class="timeline-item">
+                                <div class="timeline-icon"><i class="fas fa-check" style="color:${p.color}"></i></div>
+                                <div class="timeline-text">${m}</div>
+                            </div>`).join('')}
+                    </div>
+                </div>`).join('');
+
+            // Apply phase colors to timeline dots
+            phases.forEach((p, idx) => {
+                const phaseEl = document.getElementById(`tp-${idx}`);
+                if (phaseEl) {
+                    phaseEl.style.setProperty('--phase-color', p.color);
+                    const dot = phaseEl.querySelector('.timeline-phase::before');
+                    // Use CSS variable approach
+                    phaseEl.style.cssText += `; --phase-color:${p.color}`;
+                }
+            });
+        }
+
+        // ================================================
+        // 资源推荐渲染
+        // ================================================
+        function renderResources(resources) {
+            if (!resources) return;
+            const gridEl = document.getElementById('resource-grid');
+            if (!gridEl) return;
+
+            const categories = [
+                { icon: 'fa-graduation-cap', title: '培训课程', color: '#3182ce', items: resources.training || [] },
+                { icon: 'fa-users',          title: '人脉网络', color: '#e89e31', items: resources.network || [] },
+                { icon: 'fa-certificate',    title: '认证证书', color: '#38a169', items: resources.cert    || [] },
+            ];
+
+            gridEl.innerHTML = categories.map(cat => `
+                <div class="resource-category">
+                    <h4><i class="fas ${cat.icon}" style="color:${cat.color}"></i> ${cat.title}</h4>
+                    ${cat.items.map(item => `
+                        <div class="resource-item">
+                            <div class="resource-name">${item.name}</div>
+                            <div class="resource-desc">${item.desc}</div>
+                            <span class="resource-tag">${item.tag}</span>
+                        </div>`).join('')}
+                </div>`).join('');
         }
         
         // 渲染方向分析
@@ -1260,7 +591,7 @@
         
         // 返回测试
         function goBackToTest() {
-            window.location.href = 'index.html';
+            window.location.href = 'index_v2.html';
         }
         
         // 报告导航切换
@@ -1282,7 +613,7 @@
 
         // ========== 岗位数据库（定期更新） ==========
         // 更新日期：2026-05-05
-        // 数据来源：行业调研、招聘平台分析
+        // 数据来源：index_v2.html（医护职业转型测试系统）
         // 注意：本数据库覆盖reportData中所有岗位，支持多名称映射
         
 // ========== 岗位数据库（完整版） ==========
@@ -2419,7 +1750,7 @@ const positionNameMap = {
                     <i class="fas fa-tools"></i> 招聘搜索跳转功能开发中，敬请期待
                 </div>
                 <div class="position-source-note">
-                    数据更新日期：2026-05-05 | 数据来源：行业调研、招聘平台分析
+                    数据更新日期：2026-05-05 | 数据来源：index_v2.html（医护职业转型测试系统）
                 </div>
             </div>
         </div>
