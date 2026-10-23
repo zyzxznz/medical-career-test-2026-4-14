@@ -941,13 +941,13 @@ body {
 
 /* ===== BARS 心理测量升级：一致性提示 ===== */
 .consistency-warning {
-    background: #FFF5F5;
-    border-left: 4px solid #E53E3E;
+    background: var(--accent-bg);
+    border-left: 4px solid var(--danger);
     padding: 12px 16px;
     border-radius: 6px;
     margin-bottom: 16px;
     font-size: 13px;
-    color: #C53030;
+    color: var(--danger);
     display: flex;
     align-items: flex-start;
     gap: 8px;
@@ -955,13 +955,13 @@ body {
 .consistency-warning i { margin-top: 2px; flex-shrink: 0; }
 
 .consistency-note {
-    background: #FFFAF0;
-    border-left: 4px solid #DD6B20;
+    background: var(--accent-bg);
+    border-left: 4px solid var(--warning);
     padding: 12px 16px;
     border-radius: 6px;
     margin-bottom: 16px;
     font-size: 13px;
-    color: #975A16;
+    color: var(--accent);
     display: flex;
     align-items: flex-start;
     gap: 8px;
@@ -969,13 +969,13 @@ body {
 .consistency-note i { margin-top: 2px; flex-shrink: 0; }
 
 .consistency-good {
-    background: #F0FFF4;
-    border-left: 4px solid #38A169;
+    background: var(--primary-bg);
+    border-left: 4px solid var(--success);
     padding: 12px 16px;
     border-radius: 6px;
     margin-bottom: 16px;
     font-size: 13px;
-    color: #276749;
+    color: var(--primary-dark);
     display: flex;
     align-items: flex-start;
     gap: 8px;
@@ -1023,21 +1023,21 @@ body {
     gap: 6px 12px;
     justify-content: flex-start;
     padding: 8px 12px;
-    background: #fff;
-    border: 1px solid #bee3f8;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
     border-radius: 8px;
     font-size: 13px;
     line-height: 1.5;
 }
 .market-row strong {
     min-width: 44px;
-    color: #2b6cb0;
+    color: var(--primary-dark);
 }
 .market-score {
     margin-left: auto;
     font-weight: 700;
-    color: #2b6cb0;
-    background: #ebf8ff;
+    color: var(--primary);
+    background: var(--primary-bg);
     padding: 2px 10px;
     border-radius: 20px;
     font-size: 12px;
@@ -1085,4 +1085,222 @@ body {
     background: #fff;
     border-radius: 8px;
     padding: 10px 12px;
+}
+
+/* ============================================================
+   设计一致性补丁（2026-10-23）
+   目标：收回分散在 HTML/JS 里的内联硬编码色，统一回归主 token；
+   修复主/次按钮层级；校准滑块主题化；强化选项选中反馈。
+   映射规则：蓝→info / 绿→success / 紫→accent / 红橙→danger|warning
+   ============================================================ */
+
+/* ---- 主操作 vs 次操作：拉开层级 ---- */
+.btn-secondary {
+    background: var(--bg-card);
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    box-shadow: none;
+}
+.btn-secondary:hover {
+    background: var(--primary-bg);
+    border-color: var(--primary-dark);
+    color: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(45,106,79,0.18);
+}
+
+/* ---- 校准面板：次级操作小按钮（返回/恢复默认）---- */
+.btn-ghost-sm {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-mid);
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+    transition: all var(--t-mid) var(--ease);
+}
+.btn-ghost-sm:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-bg);
+}
+
+/* ---- 校准面板容器（去内联）---- */
+.config-card {
+    max-width: 860px;
+    margin: 20px auto;
+    padding: 28px;
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+}
+.config-card h2 {
+    margin: 0;
+    font-size: 22px;
+    color: var(--primary-dark);
+}
+.config-note {
+    color: var(--text-light);
+    font-size: 13px;
+    margin: 0 0 18px;
+}
+/* 参数说明框：用 info 语义（原硬蓝已收回） */
+.param-info-box {
+    margin-top: 20px;
+    padding: 14px 16px;
+    background: var(--primary-bg);
+    border-left: 4px solid var(--info);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--text-mid);
+}
+
+/* ---- 校准面板：方向卡片 + 参数条（去内联）---- */
+.market-config-item {
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    background: var(--bg-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+.market-config-item .dir-name {
+    font-size: 15px;
+    color: var(--primary-dark);
+}
+.market-config-item .market-score-pill {
+    font-size: 12px;
+    color: var(--text-light);
+    background: var(--primary-bg);
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+.market-config-item .market-score-pill b {
+    color: var(--primary);
+}
+.market-config-item .param-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-mid);
+    margin-bottom: 4px;
+}
+.market-config-item .param-label b {
+    font-weight: 600;
+}
+
+/* ---- 校准滑块（原无自定义样式）主题化 ---- */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--bg-muted);
+    outline: none;
+    cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 3px solid var(--bg-card);
+    box-shadow: 0 2px 6px rgba(45,106,79,0.35);
+    transition: transform var(--t-fast) var(--ease);
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    background: var(--primary-dark);
+}
+input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 3px solid var(--bg-card);
+    box-shadow: 0 2px 6px rgba(45,106,79,0.35);
+    cursor: pointer;
+}
+input[type="range"]::-moz-range-track {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--bg-muted);
+}
+
+/* ---- 结果页：行业市场视角（原硬蓝已收回，统一 info 语义）---- */
+.market-box {
+    border-left: 4px solid var(--info) !important;
+    background: var(--primary-bg) !important;
+}
+.market-row {
+    border: 1px solid var(--border) !important;
+    background: var(--bg-card) !important;
+}
+.market-row strong {
+    color: var(--primary-dark) !important;
+}
+.market-score {
+    color: var(--primary) !important;
+    background: var(--primary-bg) !important;
+}
+
+/* ---- 结果页：匹配岗位（原硬绿已并入主绿系）---- */
+.jobs-box {
+    border-left: 4px solid var(--success) !important;
+    background: var(--primary-bg) !important;
+}
+.job-req-note {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 4px;
+}
+.job-reachable {
+    font-size: 12px;
+    color: var(--success);
+    margin-top: 4px;
+}
+.job-need-gate {
+    font-size: 12px;
+    color: var(--warning);
+    margin-top: 4px;
+}
+
+/* ---- 结果页：反事实视角（原硬紫已收回，转 accent 暖橙）---- */
+.counterfactual-box {
+    border-left: 4px solid var(--accent) !important;
+    background: var(--accent-bg) !important;
+}
+
+/* ---- 结果页：风险兜底警告（原硬红已收回，转 danger）---- */
+.risk-warning {
+    border-left: 4px solid var(--danger) !important;
+    background: var(--accent-bg) !important;
+}
+.risk-warning h4 { color: var(--danger); }
+
+/* ---- 调试信息块（去内联）---- */
+.debug-box {
+    margin-top: 20px;
+    padding: 15px;
+    background: var(--bg-muted);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.7;
+}
+
+/* ---- 选项选中反馈增强（原仅左边框，现加浅底+位移）---- */
+.option.selected {
+    background: var(--primary-bg);
+    border-color: var(--primary);
+    border-left: 4px solid var(--primary);
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(45,106,79,0.12);
 }
